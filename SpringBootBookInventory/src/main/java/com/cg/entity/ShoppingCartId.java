@@ -1,4 +1,4 @@
-package com.cg.entities;
+package com.cg.entity;
 
 import jakarta.persistence.Embeddable;
 import java.io.Serializable;
