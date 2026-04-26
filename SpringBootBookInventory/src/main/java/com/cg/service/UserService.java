@@ -1,40 +1,40 @@
 package com.cg.service;
 
-import java.util.List;
-
-import org.apache.coyote.BadRequestException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.security.autoconfigure.SecurityProperties.User;
+import com.cg.dto.UserDto;
+import com.cg.entity.PermRole;
+import com.cg.entity.User;
+import com.cg.exception.ResourceNotFoundException;
+import com.cg.repo.PermRoleRepository;
+import com.cg.repo.UserRepository;
 import org.springframework.stereotype.Service;
 
-import com.cg.repo.UserRepository;
+import java.util.List;
 
 @Service
 public class UserService {
 
-    @Autowired
-    private UserRepository repo;
+    private final UserRepository repo;
+    private final PermRoleRepository roleRepository;
 
-    public List<User> getAll() {
-        return repo.findAll();
+    public UserService(UserRepository repo, PermRoleRepository roleRepository) {
+        this.repo = repo;
+        this.roleRepository = roleRepository;
     }
 
-    public User getById(Integer id) {
-        return repo.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+    public List<UserDto> getAll() { return repo.findAll().stream().map(this::toDto).toList(); }
+
+    public UserDto getById(Integer id) {
+        return toDto(repo.findById(id).orElseThrow(() -> new ResourceNotFoundException("User not found")));
     }
 
-    public User save(User user) {
-        if (user.getUserName() == null) {
-            throw new BadRequestException("Username required");
-        }
-        return repo.save(user);
+    public UserDto save(UserDto user) {
+        return toDto(repo.save(toEntity(user)));
     }
 
     public void delete(Integer id) {
-        if (!repo.existsById(id)) {
-            throw new ResourceNotFoundException("User not found");
-        }
         repo.deleteById(id);
     }
+
+    private UserDto toDto(User user){ return new UserDto(user.getUserID(), user.getFirstName(), user.getLastName(), user.getPhoneNumber(), user.getUserName(), user.getPassword(), user.getRole()==null?null:user.getRole().getRoleNumber()); }
+    private User toEntity(UserDto dto){ User user = new User(); user.setUserID(dto.userID()); user.setFirstName(dto.firstName()); user.setLastName(dto.lastName()); user.setPhoneNumber(dto.phoneNumber()); user.setUserName(dto.userName()); user.setPassword(dto.password()); if(dto.roleNumber()!=null){ PermRole role=roleRepository.findById(dto.roleNumber()).orElseThrow(() -> new ResourceNotFoundException("Role not found")); user.setRole(role);} return user; }
 }

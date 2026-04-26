@@ -1,26 +1,22 @@
 package com.cg.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.security.autoconfigure.SecurityProperties.User;
-import org.springframework.stereotype.Service;
-
+import com.cg.dto.UserDto;
+import com.cg.exception.ResourceNotFoundException;
 import com.cg.repo.UserRepository;
+import org.springframework.stereotype.Service;
 
 @Service
 public class AuthService {
 
-    @Autowired
-    private UserRepository repo;
+    private final UserRepository repo;
 
-    public User register(User user) {
-        if (user.getUserName() == null || user.getPassword() == null) {
-            throw new BadRequestException("Username or Password missing");
-        }
-        return repo.save(user);
+    public AuthService(UserRepository repo) {
+        this.repo = repo;
     }
 
-    public User findByUsername(String username) {
+    public UserDto findByUsername(String username) {
         return repo.findByUserName(username)
+                .map(u -> new UserDto(u.getUserID(), u.getFirstName(), u.getLastName(), u.getPhoneNumber(), u.getUserName(), u.getPassword(), u.getRole() == null ? null : u.getRole().getRoleNumber()))
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 }

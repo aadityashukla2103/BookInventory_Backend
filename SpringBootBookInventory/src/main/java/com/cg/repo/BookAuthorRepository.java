@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface BookAuthorRepository extends JpaRepository<BookAuthor, BookAuthorId> {
 
-	List<BookAuthor> findByIdIsbn(String isbn);
+    List<BookAuthor> findById_ISBN(String isbn);
 
-	List<BookAuthor> findByIdAuthorId(Integer authorId);
+    List<BookAuthor> findById_AuthorID(Integer authorId);
 }

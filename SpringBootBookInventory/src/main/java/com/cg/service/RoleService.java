@@ -1,31 +1,27 @@
 package com.cg.service;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import com.cg.dto.PermRoleDto;
+import com.cg.entity.PermRole;
+import com.cg.exception.ResourceNotFoundException;
+import com.cg.repo.PermRoleRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class RoleService {
 
-    @Autowired
-    private RoleRepository repo;
+    private final PermRoleRepository repo;
 
-    public List<PermRole> getAll() {
-        return repo.findAll();
+    public RoleService(PermRoleRepository repo) {
+        this.repo = repo;
     }
 
-    public PermRole save(PermRole role) {
-        if (role.getPermRole() == null) {
-            throw new BadRequestException("Role name required");
-        }
-        return repo.save(role);
-    }
+    public List<PermRoleDto> getAll() { return repo.findAll().stream().map(this::toDto).toList(); }
+    public PermRoleDto get(Integer id) { return toDto(repo.findById(id).orElseThrow(() -> new ResourceNotFoundException("Role not found"))); }
+    public PermRoleDto save(PermRoleDto role) { return toDto(repo.save(toEntity(role))); }
+    public void delete(Integer id) { repo.deleteById(id); }
 
-    public void delete(Integer id) {
-        if (!repo.existsById(id)) {
-            throw new ResourceNotFoundException("Role not found");
-        }
-        repo.deleteById(id);
-    }
+    private PermRoleDto toDto(PermRole role){ return new PermRoleDto(role.getRoleNumber(), role.getPermRole()); }
+    private PermRole toEntity(PermRoleDto dto){ PermRole role = new PermRole(); role.setRoleNumber(dto.roleNumber()); role.setPermRole(dto.permRole()); return role; }
 }
