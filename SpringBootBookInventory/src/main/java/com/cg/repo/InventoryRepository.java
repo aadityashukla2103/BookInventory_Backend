@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface InventoryRepository extends JpaRepository<Inventory, Integer> {
 
-    List<Inventory> findByIsbn(String isbn);
+    List<Inventory> findByBook_Isbn(String isbn);
 
     List<Inventory> findByPurchasedFalse();
 }
