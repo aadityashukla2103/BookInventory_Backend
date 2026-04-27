@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface ShoppingCartRepository extends JpaRepository<ShoppingCart, ShoppingCartId> {
 
-	List<ShoppingCart> findByIdUserId(Integer userId);
+	List<ShoppingCart> findById_UserID(Integer userId);
 
-	List<ShoppingCart> findByIdIsbn(String isbn);
+	List<ShoppingCart> findById_ISBN(String isbn);
 }

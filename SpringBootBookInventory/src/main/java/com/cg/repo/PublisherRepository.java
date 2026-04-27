@@ -11,5 +11,5 @@ public interface PublisherRepository extends JpaRepository<Publisher, Integer> {
 
 	List<Publisher> findByNameContainingIgnoreCase(String name);
 
-	List<Publisher> findByStateCode(String stateCode);
+    List<Publisher> findByState_StateCode(String stateCode);
 }

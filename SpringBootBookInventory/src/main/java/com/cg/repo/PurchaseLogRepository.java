@@ -10,7 +10,8 @@ import java.util.List;
 @Repository
 public interface PurchaseLogRepository extends JpaRepository<PurchaseLog, PurchaseLogId> {
 
-	List<PurchaseLog> findByIdUserId(Integer userId);
+    List<PurchaseLog> findById_UserID(Integer userId);
 
-	List<PurchaseLog> findByIdInventoryId(Integer inventoryId);
-}
+    List<PurchaseLog> findById_InventoryID(Integer inventoryId);
+    
+    }
