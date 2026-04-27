@@ -4,6 +4,7 @@ public class BookReviewDto {
 	private String isbn;
 	private Integer reviewerId;
 	private Integer rating;
+	
 	private String comments;
 
 	public String getIsbn() {
