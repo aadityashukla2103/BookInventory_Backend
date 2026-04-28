@@ -45,40 +45,4 @@ public class BookConditionController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/count")
-    public long count() {
-        return bookConditionService.getAll().size();
-    }
-
-    @GetMapping("/empty")
-    public boolean isEmpty() {
-        return bookConditionService.getAll().isEmpty();
-    }
-
-    @GetMapping("/first")
-    public ResponseEntity<BookConditionDto> getFirst() {
-        return bookConditionService.getAll().stream().findFirst()
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.noContent().build());
-    }
-    
-    @GetMapping("/last")
-    public ResponseEntity<BookConditionDto> getLast() {
-        List<BookConditionDto> items = bookConditionService.getAll();
-        if (items.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(items.get(items.size() - 1));
-    }
-    
-    @GetMapping("/exists/{ranks}")
-    public boolean exists(@PathVariable Integer ranks) {
-        try {
-            bookConditionService.getById(ranks);
-            return true;
-        } catch (ResourceNotFoundException ex) {
-            return false;
-        }
-    }
-
 }
