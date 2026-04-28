@@ -13,7 +13,7 @@ public class Author {
 	@Column(name = "LastName", nullable = false)
 	private String lastName;
 
-	@Column(name = "FirstName", nullable = false)
+	@Column(name = "\"FirstName\"", nullable = false)
 	private String firstName;
 
 	@Column(name = "Photo", length = 1)

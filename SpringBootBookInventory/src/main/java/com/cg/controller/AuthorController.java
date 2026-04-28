@@ -45,39 +45,4 @@ public class AuthorController {
 		return ResponseEntity.noContent().build();
 	}
 
-	@GetMapping("/count")
-	public long count() {
-		return authorService.getAll().size();
-	}
-
-	@GetMapping("/empty")
-	public boolean isEmpty() {
-		return authorService.getAll().isEmpty();
-	}
-
-	@GetMapping("/first")
-	public ResponseEntity<AuthorDto> getFirst() {
-		return authorService.getAll().stream().findFirst().map(ResponseEntity::ok)
-				.orElseGet(() -> ResponseEntity.noContent().build());
-	}
-
-	@GetMapping("/last")
-	public ResponseEntity<AuthorDto> getLast() {
-		List<AuthorDto> items = authorService.getAll();
-		if (items.isEmpty()) {
-			return ResponseEntity.noContent().build();
-		}
-		return ResponseEntity.ok(items.get(items.size() - 1));
-	}
-
-	@GetMapping("/exists/{authorId}")
-	public boolean exists(@PathVariable Integer authorId) {
-		try {
-			authorService.getById(authorId);
-			return true;
-		} catch (ResourceNotFoundException ex) {
-			return false;
-		}
-	}
-
 }
