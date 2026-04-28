@@ -44,40 +44,4 @@ public class PurchaseLogController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/count")
-    public long count() {
-        return purchaseLogService.getAll().size();
-    }
-
-    @GetMapping("/empty")
-    public boolean isEmpty() {
-        return purchaseLogService.getAll().isEmpty();
-    }
-
-    @GetMapping("/first")
-    public ResponseEntity<PurchaseLogDto> getFirst() {
-        return purchaseLogService.getAll().stream().findFirst()
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.noContent().build());
-    }
-   
-    @GetMapping("/last")
-    public ResponseEntity<PurchaseLogDto> getLast() {
-        List<PurchaseLogDto> items = purchaseLogService.getAll();
-        if (items.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(items.get(items.size() - 1));
-    }
-    
-    @GetMapping("/exists")
-    public boolean exists(@RequestParam Integer userId, @RequestParam Integer inventoryId) {
-        try {
-            purchaseLogService.getById(userId, inventoryId);
-            return true;
-        } catch (ResourceNotFoundException ex) {
-            return false;
-        }
-    }
-
 }

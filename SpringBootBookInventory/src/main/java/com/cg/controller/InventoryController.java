@@ -44,40 +44,4 @@ public class InventoryController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/count")
-    public long count() {
-        return inventoryService.getAll().size();
-    }
-
-    @GetMapping("/empty")
-    public boolean isEmpty() {
-        return inventoryService.getAll().isEmpty();
-    }
-
-    @GetMapping("/first")
-    public ResponseEntity<InventoryDto> getFirst() {
-        return inventoryService.getAll().stream().findFirst()
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.noContent().build());
-    }
-
-    @GetMapping("/last")
-    public ResponseEntity<InventoryDto> getLast() {
-        List<InventoryDto> items = inventoryService.getAll();
-        if (items.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(items.get(items.size() - 1));
-    }
-    
-    @GetMapping("/exists/{inventoryId}")
-    public boolean exists(@PathVariable Integer inventoryId) {
-        try {
-            inventoryService.getById(inventoryId);
-            return true;
-        } catch (ResourceNotFoundException ex) {
-            return false;
-        }
-    }
-
 }
