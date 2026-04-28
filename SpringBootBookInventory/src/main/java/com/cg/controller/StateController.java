@@ -45,39 +45,4 @@ public class StateController {
 		return ResponseEntity.noContent().build();
 	}
 
-	@GetMapping("/count")
-	public long count() {
-		return stateService.getAll().size();
-	}
-
-	@GetMapping("/empty")
-	public boolean isEmpty() {
-		return stateService.getAll().isEmpty();
-	}
-
-	@GetMapping("/first")
-	public ResponseEntity<StateDto> getFirst() {
-		return stateService.getAll().stream().findFirst().map(ResponseEntity::ok)
-				.orElseGet(() -> ResponseEntity.noContent().build());
-	}
-
-	@GetMapping("/last")
-	public ResponseEntity<StateDto> getLast() {
-		List<StateDto> items = stateService.getAll();
-		if (items.isEmpty()) {
-			return ResponseEntity.noContent().build();
-		}
-		return ResponseEntity.ok(items.get(items.size() - 1));
-	}
-
-	@GetMapping("/exists/{stateCode}")
-	public boolean exists(@PathVariable String stateCode) {
-		try {
-			stateService.getById(stateCode);
-			return true;
-		} catch (ResourceNotFoundException ex) {
-			return false;
-		}
-	}
-
 }
