@@ -11,40 +11,40 @@ import jakarta.persistence.Table;
 @Table(name = "purchaselog")
 public class PurchaseLog {
 
-    @EmbeddedId
-    private PurchaseLogId id;
+	@EmbeddedId
+	private PurchaseLogId id;
 
-    @ManyToOne
-    @MapsId("userID")
-    @JoinColumn(name = "UserID")
-    private User user;
+	@ManyToOne
+	@MapsId("userID")
+	@JoinColumn(name = "\"UserID\"")
+	private User user;
 
-    @ManyToOne
-    @MapsId("inventoryID")
-    @JoinColumn(name = "InventoryID")
-    private Inventory inventory;
+	@ManyToOne
+	@MapsId("inventoryID")
+	@JoinColumn(name = "\"InventoryID\"")
+	private Inventory inventory;
 
-    public PurchaseLogId getId() {
-        return id;
-    }
+	public PurchaseLogId getId() {
+		return id;
+	}
 
-    public void setId(PurchaseLogId id) {
-        this.id = id;
-    }
+	public void setId(PurchaseLogId id) {
+		this.id = id;
+	}
 
-    public User getUser() {
-        return user;
-    }
+	public User getUser() {
+		return user;
+	}
 
-    public void setUser(User user) {
-        this.user = user;
-    }
+	public void setUser(User user) {
+		this.user = user;
+	}
 
-    public Inventory getInventory() {
-        return inventory;
-    }
+	public Inventory getInventory() {
+		return inventory;
+	}
 
-    public void setInventory(Inventory inventory) {
-        this.inventory = inventory;
-    }
+	public void setInventory(Inventory inventory) {
+		this.inventory = inventory;
+	}
 }

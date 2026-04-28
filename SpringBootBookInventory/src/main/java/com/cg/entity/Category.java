@@ -7,15 +7,15 @@ import java.util.List;
 @Table(name = "category")
 public class Category {
 
-    @Id
-    @Column(name = "CatID")
-    private Integer catId;
+	@Id
+	@Column(name = "\"CatID\"")
+	private Integer catId;
 
-    @Column(name = "CategoryName")
-    private String categoryName;
+	@Column(name = "\"CategoryName\"")
+	private String categoryName;
 
-    @OneToMany(mappedBy = "category")
-    private List<Book> books;
+	@OneToMany(mappedBy = "category")
+	private List<Book> books;
 
 	public Integer getCatId() {
 		return catId;
@@ -41,5 +41,4 @@ public class Category {
 		this.books = books;
 	}
 
-    
 }

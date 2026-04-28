@@ -6,16 +6,15 @@ import java.util.List;
 @Entity
 @Table(name = "state")
 public class State {
+	@Id
+	@Column(name = "\"StateCode\"", length = 2)
+	private String stateCode;
 
-    @Id
-    @Column(name = "StateCode", length = 2)
-    private String stateCode;
+	@Column(name = "\"StateName\"", length = 50)
+	private String stateName;
 
-    @Column(name = "StateName" , length = 50)
-    private String stateName;
-
-    @OneToMany(mappedBy = "state")
-    private List<Publisher> publishers;
+	@OneToMany(mappedBy = "state")
+	private List<Publisher> publishers;
 
 	public String getStateCode() {
 		return stateCode;
@@ -41,5 +40,4 @@ public class State {
 		this.publishers = publishers;
 	}
 
-    
 }

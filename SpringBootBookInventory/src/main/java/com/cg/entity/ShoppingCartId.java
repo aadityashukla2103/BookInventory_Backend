@@ -7,8 +7,8 @@ import java.util.Objects;
 @Embeddable
 public class ShoppingCartId implements Serializable {
 
-    private Integer userID;
-    private String ISBN;
+	private Integer userID;
+	private String ISBN;
 
     public ShoppingCartId() {
     }

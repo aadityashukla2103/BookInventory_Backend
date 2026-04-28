@@ -6,27 +6,26 @@ import jakarta.persistence.*;
 @Table(name = "book")
 public class Book {
 
-    @Id
-    @Column(name = "ISBN", length = 13)
-    private String isbn;
+	@Id
+	@Column(name = "\"ISBN\"", length = 13)
+	private String isbn;
 
-    @Column(name = "Title", length = 70, nullable = false)
-    private String title;
+	@Column(name = "\"Title\"", length = 70, nullable = false)
+	private String title;
 
-    @Column(name = "Description", length = 100)
-    private String description;
+	@Column(name = "\"Description\"", length = 100)
+	private String description;
 
-    @Column(name = "Edition", length = 30)
-    private String edition;
+	@Column(name = "\"Edition\"", length = 30)
+	private String edition;
 
-    
-    @ManyToOne
-    @JoinColumn(name = "Category")   
-    private Category category;
+	@ManyToOne
+	@JoinColumn(name = "\"Category\"")
+	private Category category;
 
-    @ManyToOne
-    @JoinColumn(name = "PublisherID", nullable = false)
-    private Publisher publisher;
+	@ManyToOne
+	@JoinColumn(name = "\"PublisherID\"", nullable = false)
+	private Publisher publisher;
 
 	public String getIsbn() {
 		return isbn;
@@ -76,5 +75,4 @@ public class Book {
 		this.publisher = publisher;
 	}
 
-    
 }
