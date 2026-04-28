@@ -10,10 +10,10 @@ import jakarta.persistence.Table;
 public class PermRole {
 
 	@Id
-	@Column(name = "RoleNumber")
+	@Column(name = "\"RoleNumber\"")
 	private Integer roleNumber;
 
-	@Column(name = "PermRole")
+	@Column(name = "\"PermRole\"")
 	private String permRole;
 
 	public Integer getRoleNumber() {

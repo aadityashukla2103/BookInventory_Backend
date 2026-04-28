@@ -11,15 +11,15 @@ public class BookAuthor {
 
 	@ManyToOne
 	@MapsId("ISBN")
-	@JoinColumn(name = "ISBN")
+	@JoinColumn(name = "\"ISBN\"")
 	private Book book;
 
 	@ManyToOne
 	@MapsId("authorID")
-	@JoinColumn(name = "AuthorID")
+	@JoinColumn(name = "\"authorID\"")
 	private Author author;
 
-	@Column(name = "PrimaryAuthor")
+	@Column(name = "\"PrimaryAuthor\"")
 	private String primaryAuthor;
 
 	public BookAuthor() {

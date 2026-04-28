@@ -13,52 +13,52 @@ import jakarta.persistence.GenerationType;
 @Table(name = "inventory")
 public class Inventory {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "InventoryID")
-    private Integer inventoryID;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "\"InventoryID\"")
+	private Integer inventoryID;
 
-    @ManyToOne
-    @JoinColumn(name = "ISBN")
-    private Book book;
+	@ManyToOne
+	@JoinColumn(name = "\"ISBN\"")
+	private Book book;
 
-    @ManyToOne
-    @JoinColumn(name = "Ranks")
-    private BookCondition bookCondition;
+	@ManyToOne
+	@JoinColumn(name = "\"Ranks\"")
+	private BookCondition bookCondition;
 
-    @Column(name = "Purchased")
-    private Boolean purchased;
+	@Column(name = "\"Purchased\"")
+	private Boolean purchased;
 
-    public Integer getInventoryID() {
-       return inventoryID;
-    }
+	public Integer getInventoryID() {
+		return inventoryID;
+	}
 
-    public void setInventoryID(Integer inventoryID) {
-        this.inventoryID = inventoryID;
-    }
+	public void setInventoryID(Integer inventoryID) {
+		this.inventoryID = inventoryID;
+	}
 
-    public Book getBook() {
-        return book;
-    }
+	public Book getBook() {
+		return book;
+	}
 
-    public void setBook(Book book) {
-        this.book = book;
-    }
+	public void setBook(Book book) {
+		this.book = book;
+	}
 
-    public BookCondition getBookCondition() {
-        return bookCondition;
-    }
+	public BookCondition getBookCondition() {
+		return bookCondition;
+	}
 
-    public void setBookCondition(BookCondition bookCondition) {
-        this.bookCondition = bookCondition;
-    }
+	public void setBookCondition(BookCondition bookCondition) {
+		this.bookCondition = bookCondition;
+	}
 
-    public Boolean getPurchased() {
-        return purchased;
-    }
+	public Boolean getPurchased() {
+		return purchased;
+	}
 
-    public void setPurchased(Boolean purchased) {
-        this.purchased = purchased;
-    }    
-    
+	public void setPurchased(Boolean purchased) {
+		this.purchased = purchased;
+	}
+
 }

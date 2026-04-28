@@ -10,31 +10,30 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "\"user\"")
+@Table(name = "\"users\"")
 public class User {
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "UserID")
+	@Column(name = "\"UserID\"")
 	private Integer userID;
 
-	@Column(name = "LastName")
+	@Column(name = "\"LastName\"")
 	private String lastName;
 
-	@Column(name = "FirstName")
+	@Column(name = "\"FirstName\"")
 	private String firstName;
 
-	@Column(name = "PhoneNumber")
+	@Column(name = "\"PhoneNumber\"")
 	private String phoneNumber;
 
-	@Column(name = "UserName")
+	@Column(name = "\"UserName\"")
 	private String userName;
 
-	@Column(name = "Password")
+	@Column(name = "\"Password\"")
 	private String password;
 
 	@ManyToOne
-	@JoinColumn(name = "RoleNumber")
+	@JoinColumn(name = "\"RoleNumber\"")
 	private PermRole role;
 
 	public Integer getUserID() {
