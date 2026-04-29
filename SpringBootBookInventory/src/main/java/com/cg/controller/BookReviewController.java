@@ -40,42 +40,4 @@ public class BookReviewController {
         return ResponseEntity.noContent().build();
     }
 
-
-    @GetMapping("/count")
-    public long count() {
-        return bookReviewService.getAll().size();
-    }
-
-    @GetMapping("/empty")
-    public boolean isEmpty() {
-        return bookReviewService.getAll().isEmpty();
-    }
-
-    @GetMapping("/first")
-    public ResponseEntity<BookReviewDto> getFirst() {
-        return bookReviewService.getAll().stream().findFirst()
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.noContent().build());
-    }
-
-    
-
-    @GetMapping("/last")
-    public ResponseEntity<BookReviewDto> getLast() {
-        List<BookReviewDto> items = bookReviewService.getAll();
-        if (items.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(items.get(items.size() - 1));
-    }
-    @GetMapping("/exists")
-    public boolean exists(@RequestParam String isbn, @RequestParam Integer reviewerId) {
-        try {
-            bookReviewService.getById(isbn, reviewerId);
-            return true;
-        } catch (ResourceNotFoundException ex) {
-            return false;
-        }
-    }
-
 }

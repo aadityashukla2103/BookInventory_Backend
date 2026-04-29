@@ -39,43 +39,4 @@ public class ShoppingCartController {
         shoppingCartService.delete(userId, isbn);
         return ResponseEntity.noContent().build();
     }
-
-
-    @GetMapping("/count")
-    public long count() {
-        return shoppingCartService.getAll().size();
-    }
-
-    @GetMapping("/empty")
-    public boolean isEmpty() {
-        return shoppingCartService.getAll().isEmpty();
-    }
-
-    @GetMapping("/first")
-    public ResponseEntity<ShoppingCartDto> getFirst() {
-        return shoppingCartService.getAll().stream().findFirst()
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.noContent().build());
-    }
-
-    
-
-    @GetMapping("/last")
-    public ResponseEntity<ShoppingCartDto> getLast() {
-        List<ShoppingCartDto> items = shoppingCartService.getAll();
-        if (items.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(items.get(items.size() - 1));
-    }
-    @GetMapping("/exists")
-    public boolean exists(@RequestParam Integer userId, @RequestParam String isbn) {
-        try {
-            shoppingCartService.getById(userId, isbn);
-            return true;
-        } catch (ResourceNotFoundException ex) {
-            return false;
-        }
-    }
-
 }
