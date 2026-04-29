@@ -7,17 +7,17 @@ import java.util.List;
 @Table(name = "publisher")
 public class Publisher {
 	@Id
-	@Column(name = "\"PublisherID\"")
+	@Column(name = "PublisherID")
 	private Integer publisherId;
 
-	@Column(name = "\"Name\"", length = 50, nullable = false)
+	@Column(name = "Name", length = 50, nullable = false)
 	private String name;
 
-	@Column(name = "\"City\"", length = 30)
+	@Column(name = "City", length = 30)
 	private String city;
 
 	@ManyToOne
-	@JoinColumn(name = "\"StateCode\"")
+	@JoinColumn(name = "StateCode")
 	private State state;
 
 	@OneToMany(mappedBy = "publisher")

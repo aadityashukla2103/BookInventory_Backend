@@ -1,4 +1,3 @@
-```java id="q8l3xp"
 package com.cg.controller;
 
 import com.cg.dto.PermRoleDto;
@@ -83,4 +82,3 @@ class PermRoleControllerTest {
         assertEquals(204, response.getStatusCodeValue());
     }
 }
-```

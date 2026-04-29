@@ -4,35 +4,39 @@ import java.io.Serializable;
 import java.util.Objects;
 
 import jakarta.persistence.Embeddable;
+import jakarta.persistence.Column;
 
 @Embeddable
 public class BookAuthorId implements Serializable {
 
-	private String ISBN;
-	private Integer authorID;
+	@Column(name = "ISBN")
+	private String isbn;
+	
+	@Column(name = "authorID")
+	private Integer authorId;
 
 	public BookAuthorId() {
 	}
 
 	public BookAuthorId(String ISBN, Integer authorID) {
-		this.ISBN = ISBN;
-		this.authorID = authorID;
+		this.isbn = ISBN;
+		this.authorId = authorID;
 	}
 
 	public String getISBN() {
-		return ISBN;
+		return isbn;
 	}
 
 	public void setISBN(String ISBN) {
-		this.ISBN = ISBN;
+		this.isbn = ISBN;
 	}
 
 	public Integer getAuthorID() {
-		return authorID;
+		return authorId;
 	}
 
 	public void setAuthorID(Integer authorID) {
-		this.authorID = authorID;
+		this.authorId = authorID;
 	}
 
 	@Override
@@ -42,11 +46,11 @@ public class BookAuthorId implements Serializable {
 		if (!(o instanceof BookAuthorId))
 			return false;
 		BookAuthorId that = (BookAuthorId) o;
-		return Objects.equals(ISBN, that.ISBN) && Objects.equals(authorID, that.authorID);
+		return Objects.equals(isbn, that.isbn) && Objects.equals(authorId, that.authorId);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(ISBN, authorID);
+		return Objects.hash(isbn, authorId);
 	}
 }

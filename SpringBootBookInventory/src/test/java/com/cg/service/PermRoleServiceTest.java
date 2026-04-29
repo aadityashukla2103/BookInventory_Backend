@@ -1,4 +1,3 @@
-```java
 package com.cg.service;
 
 import com.cg.dto.PermRoleDto;
@@ -116,4 +115,3 @@ class PermRoleServiceTest {
                 () -> permRoleService.delete(1));
     }
 }
-```

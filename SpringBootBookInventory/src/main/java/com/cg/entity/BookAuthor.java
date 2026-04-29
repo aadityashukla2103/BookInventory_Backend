@@ -10,16 +10,16 @@ public class BookAuthor {
 	private BookAuthorId id;
 
 	@ManyToOne
-	@MapsId("ISBN")
-	@JoinColumn(name = "\"ISBN\"")
+	@MapsId("isbn")
+	@JoinColumn(name = "ISBN")
 	private Book book;
 
 	@ManyToOne
-	@MapsId("authorID")
-	@JoinColumn(name = "\"authorID\"")
+	@MapsId("authorId")
+	@JoinColumn(name = "authorID")
 	private Author author;
 
-	@Column(name = "\"PrimaryAuthor\"")
+	@Column(name = "PrimaryAuthor")
 	private String primaryAuthor;
 
 	public BookAuthor() {

@@ -1,4 +1,3 @@
-```java id="m5r2tz"
 package com.cg.controller;
 
 import com.cg.dto.ShoppingCartDto;
@@ -87,4 +86,3 @@ class ShoppingCartControllerTest {
         assertEquals(204, response.getStatusCodeValue());
     }
 }
-```
