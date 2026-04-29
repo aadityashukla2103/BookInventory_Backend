@@ -6,6 +6,9 @@ import com.cg.entity.User;
 import com.cg.exception.ResourceNotFoundException;
 import com.cg.repo.PermRoleRepository;
 import com.cg.repo.UserRepository;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,13 +18,21 @@ public class UserService {
     private final UserRepository userRepository;
     private final PermRoleRepository permRoleRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public UserService(UserRepository userRepository, PermRoleRepository permRoleRepository) {
         this.userRepository = userRepository;
         this.permRoleRepository = permRoleRepository;
     }
 
-    public List<UserDto> getAll() { return userRepository.findAll().stream().map(this::toDto).toList(); }
-    public UserDto getById(Integer id) { return toDto(findEntity(id)); }
+    public List<UserDto> getAll() {
+        return userRepository.findAll().stream().map(this::toDto).toList();
+    }
+
+    public UserDto getById(Integer id) {
+        return toDto(findEntity(id));
+    }
 
     public UserDto create(UserDto dto) {
         User entity = new User();
@@ -35,7 +46,9 @@ public class UserService {
         return toDto(userRepository.save(entity));
     }
 
-    public void delete(Integer id) { userRepository.delete(findEntity(id)); }
+    public void delete(Integer id) {
+        userRepository.delete(findEntity(id));
+    }
 
     private User findEntity(Integer id) {
         return userRepository.findById(id)
@@ -47,10 +60,13 @@ public class UserService {
         entity.setFirstName(dto.getFirstName());
         entity.setPhoneNumber(dto.getPhoneNumber());
         entity.setUserName(dto.getUserName());
-        entity.setPassword(dto.getPassword());
+        if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
+            entity.setPassword(passwordEncoder.encode(dto.getPassword()));
+        }
         if (dto.getRoleNumber() != null) {
             PermRole role = permRoleRepository.findById(dto.getRoleNumber())
-                    .orElseThrow(() -> new ResourceNotFoundException("PermRole not found with id: " + dto.getRoleNumber()));
+                    .orElseThrow(
+                            () -> new ResourceNotFoundException("PermRole not found with id: " + dto.getRoleNumber()));
             entity.setRole(role);
         } else {
             entity.setRole(null);
@@ -59,13 +75,18 @@ public class UserService {
 
     private UserDto toDto(User entity) {
         UserDto dto = new UserDto();
+
         dto.setUserID(entity.getUserID());
         dto.setLastName(entity.getLastName());
         dto.setFirstName(entity.getFirstName());
         dto.setPhoneNumber(entity.getPhoneNumber());
         dto.setUserName(entity.getUserName());
-        dto.setPassword(entity.getPassword());
-        dto.setRoleNumber(entity.getRole() != null ? entity.getRole().getRoleNumber() : null);
+        dto.setRoleNumber(
+                entity.getRole() != null
+                        ? entity.getRole().getRoleNumber()
+                        : null);
+
         return dto;
     }
+
 }
