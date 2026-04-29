@@ -22,18 +22,16 @@ public class SecurityConfig {
 
         return http.csrf(csrf -> csrf.disable())
 
-            .authorizeHttpRequests(auth -> auth
+        		.authorizeHttpRequests(auth -> auth
+        			    .requestMatchers("/generateToken").permitAll()
+        			    .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
 
-                // Public APIs
-                .requestMatchers("/generateToken").permitAll()
-                .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
+        			    .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
+        			    .requestMatchers(HttpMethod.GET, "/api/users/**").permitAll()
 
-                // Protected APIs
-                .requestMatchers("/api/**").authenticated()
-
-                .anyRequest().authenticated()
-            )
+        			    .requestMatchers("/api/**").authenticated()
+        			    .anyRequest().authenticated()
+        			)
 
             .sessionManagement(sess ->
                 sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
