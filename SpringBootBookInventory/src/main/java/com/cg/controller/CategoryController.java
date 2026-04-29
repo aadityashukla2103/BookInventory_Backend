@@ -39,12 +39,6 @@ public class CategoryController {
         return categoryService.update(catId, dto);
     }
 
-    @DeleteMapping("/{catId}")
-    public ResponseEntity<Void> delete(@PathVariable Integer catId) {
-        categoryService.delete(catId);
-        return ResponseEntity.noContent().build();
-    }
-
 
     @GetMapping("/count")
     public long count() {
@@ -56,32 +50,9 @@ public class CategoryController {
         return categoryService.getAll().isEmpty();
     }
 
-    @GetMapping("/first")
-    public ResponseEntity<CategoryDto> getFirst() {
-        return categoryService.getAll().stream().findFirst()
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.noContent().build());
+    @DeleteMapping("/{catId}")
+    public ResponseEntity<Void> delete(@PathVariable Integer catId) {
+        categoryService.delete(catId);
+        return ResponseEntity.noContent().build();
     }
-
-    
-
-    @GetMapping("/last")
-    public ResponseEntity<CategoryDto> getLast() {
-        List<CategoryDto> items = categoryService.getAll();
-        if (items.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(items.get(items.size() - 1));
-    }
-
-    @GetMapping("/exists/{catId}")
-    public boolean exists(@PathVariable Integer catId) {
-        try {
-            categoryService.getById(catId);
-            return true;
-        } catch (ResourceNotFoundException ex) {
-            return false;
-        }
-    }
-
 }

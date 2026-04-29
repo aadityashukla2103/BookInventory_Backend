@@ -17,7 +17,9 @@ public class PublisherController {
     public PublisherController(PublisherService publisherService) { this.publisherService = publisherService; }
 
     @GetMapping
-    public List<PublisherDto> getAll() { return publisherService.getAll(); }
+    public List<PublisherDto> getAll() { 
+    	return publisherService.getAll();
+    }
 
     @GetMapping("/{publisherId}")
     public PublisherDto getById(@PathVariable Integer publisherId) { return publisherService.getById(publisherId); }
@@ -32,13 +34,6 @@ public class PublisherController {
         return publisherService.update(publisherId, dto);
     }
 
-    @DeleteMapping("/{publisherId}")
-    public ResponseEntity<Void> delete(@PathVariable Integer publisherId) {
-        publisherService.delete(publisherId);
-        return ResponseEntity.noContent().build();
-    }
-
-
     @GetMapping("/count")
     public long count() {
         return publisherService.getAll().size();
@@ -49,32 +44,10 @@ public class PublisherController {
         return publisherService.getAll().isEmpty();
     }
 
-    @GetMapping("/first")
-    public ResponseEntity<PublisherDto> getFirst() {
-        return publisherService.getAll().stream().findFirst()
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.noContent().build());
-    }
-
-    
-
-    @GetMapping("/last")
-    public ResponseEntity<PublisherDto> getLast() {
-        List<PublisherDto> items = publisherService.getAll();
-        if (items.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(items.get(items.size() - 1));
-    }
-    
-    @GetMapping("/exists/{publisherId}")
-    public boolean exists(@PathVariable Integer publisherId) {
-        try {
-            publisherService.getById(publisherId);
-            return true;
-        } catch (ResourceNotFoundException ex) {
-            return false;
-        }
+    @DeleteMapping("/{publisherId}")
+    public ResponseEntity<Void> delete(@PathVariable Integer publisherId) {
+        publisherService.delete(publisherId);
+        return ResponseEntity.noContent().build();
     }
 
 }

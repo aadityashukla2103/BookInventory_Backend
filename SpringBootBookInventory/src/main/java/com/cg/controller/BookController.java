@@ -32,14 +32,7 @@ public class BookController {
     @PutMapping("/{isbn}")
     public BookDto update(@PathVariable String isbn, @RequestBody BookDto dto) {
         return bookService.update(isbn, dto);
-    }
-
-    @DeleteMapping("/{isbn}")
-    public ResponseEntity<Void> delete(@PathVariable String isbn) {
-        bookService.delete(isbn);
-        return ResponseEntity.noContent().build();
-    }
-
+    } 
 
     @GetMapping("/count")
     public long count() {
@@ -51,32 +44,10 @@ public class BookController {
         return bookService.getAll().isEmpty();
     }
 
-    @GetMapping("/first")
-    public ResponseEntity<BookDto> getFirst() {
-        return bookService.getAll().stream().findFirst()
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.noContent().build());
-    }
-
-    
-
-    @GetMapping("/last")
-    public ResponseEntity<BookDto> getLast() {
-        List<BookDto> items = bookService.getAll();
-        if (items.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(items.get(items.size() - 1));
-    }
-    
-    @GetMapping("/exists/{isbn}")
-    public boolean exists(@PathVariable String isbn) {
-        try {
-            bookService.getById(isbn);
-            return true;
-        } catch (ResourceNotFoundException ex) {
-            return false;
-        }
+    @DeleteMapping("/{isbn}")
+    public ResponseEntity<Void> delete(@PathVariable String isbn) {
+        bookService.delete(isbn);
+        return ResponseEntity.noContent().build();
     }
 
 }
