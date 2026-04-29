@@ -34,6 +34,3 @@ build/
 
 *.log
 hs_err_pid*
-
-pom.xml
-src/main/resources/application.properties
