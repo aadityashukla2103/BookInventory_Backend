@@ -1,6 +1,7 @@
 package com.cg.entity;
 
 import jakarta.persistence.Embeddable;
+import jakarta.persistence.Column;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -8,31 +9,34 @@ import java.util.Objects;
 public class PurchaseLogId implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	private Integer userID;
-	private Integer inventoryID;
+	@Column(name = "UserID")
+	private Integer userId;
+	
+	@Column(name = "InventoryID")
+	private Integer inventoryId;
 
 	public PurchaseLogId() {
 	}
 
 	public PurchaseLogId(Integer userID, Integer inventoryID) {
-		this.userID = userID;
-		this.inventoryID = inventoryID;
+		this.userId = userID;
+		this.inventoryId = inventoryID;
 	}
 
 	public Integer getUserID() {
-		return userID;
+		return userId;
 	}
 
 	public void setUserID(Integer userID) {
-		this.userID = userID;
+		this.userId = userID;
 	}
 
 	public Integer getInventoryID() {
-		return inventoryID;
+		return inventoryId;
 	}
 
 	public void setInventoryID(Integer inventoryID) {
-		this.inventoryID = inventoryID;
+		this.inventoryId = inventoryID;
 	}
 
 	@Override
@@ -42,17 +46,17 @@ public class PurchaseLogId implements Serializable {
 		if (o == null || getClass() != o.getClass())
 			return false;
 		PurchaseLogId that = (PurchaseLogId) o;
-		return Objects.equals(userID, that.userID) && Objects.equals(inventoryID, that.inventoryID);
+		return Objects.equals(userId, that.userId) && Objects.equals(inventoryId, that.inventoryId);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(userID, inventoryID);
+		return Objects.hash(userId, inventoryId);
 	}
 
 	@Override
 	public String toString() {
-		return "PurchaseLogId{" + "userID=" + userID + ", inventoryID=" + inventoryID + '}';
+		return "PurchaseLogId{" + "userID=" + userId + ", inventoryID=" + inventoryId + '}';
 	}
 
 }

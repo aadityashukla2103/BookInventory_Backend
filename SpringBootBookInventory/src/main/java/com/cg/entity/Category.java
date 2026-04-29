@@ -8,10 +8,10 @@ import java.util.List;
 public class Category {
 
 	@Id
-	@Column(name = "\"CatID\"")
+	@Column(name = "CatID")
 	private Integer catId;
 
-	@Column(name = "\"CategoryName\"")
+	@Column(name = "CategoryName")
 	private String categoryName;
 
 	@OneToMany(mappedBy = "category")

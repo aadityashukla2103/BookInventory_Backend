@@ -11,18 +11,18 @@ public class BookReview {
 
 	@ManyToOne
 	@MapsId("isbn")
-	@JoinColumn(name = "\"ISBN\"")
+	@JoinColumn(name = "ISBN")
 	private Book book;
 
 	@ManyToOne
 	@MapsId("reviewerId")
-	@JoinColumn(name = "\"ReviewerID\"")
+	@JoinColumn(name = "ReviewerID")
 	private Reviewer reviewer;
 
-	@Column(name = "\"Rating\"")
+	@Column(name = "Rating")
 	private Integer rating;
 
-	@Column(name = "\"Comments\"")
+	@Column(name = "Comments")
 	private String comments;
 
 	public BookReview() {

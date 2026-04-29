@@ -15,13 +15,13 @@ public class PurchaseLog {
 	private PurchaseLogId id;
 
 	@ManyToOne
-	@MapsId("userID")
-	@JoinColumn(name = "\"UserID\"")
+	@MapsId("userId")
+	@JoinColumn(name = "UserID")
 	private User user;
 
 	@ManyToOne
-	@MapsId("inventoryID")
-	@JoinColumn(name = "\"InventoryID\"")
+	@MapsId("inventoryId")
+	@JoinColumn(name = "InventoryID")
 	private Inventory inventory;
 
 	public PurchaseLogId getId() {

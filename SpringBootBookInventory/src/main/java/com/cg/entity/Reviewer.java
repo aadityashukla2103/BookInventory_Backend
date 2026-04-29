@@ -8,13 +8,13 @@ import java.util.List;
 public class Reviewer {
 
 	@Id
-	@Column(name = "\"ReviewerID\"")
+	@Column(name = "ReviewerID")
 	private Integer reviewerId;
 
-	@Column(name = "\"Name\"", nullable = false)
+	@Column(name = "Name", nullable = false)
 	private String name;
 
-	@Column(name = "\"EmployedBy\"")
+	@Column(name = "EmployedBy")
 	private String employedBy;
 
 	@OneToMany(mappedBy = "reviewer", cascade = CascadeType.ALL)

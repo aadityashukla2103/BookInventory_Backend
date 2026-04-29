@@ -1,4 +1,3 @@
-```java id="v7n2kp"
 package com.cg.controller;
 
 import com.cg.dto.UserDto;
@@ -82,4 +81,3 @@ class UserControllerTest {
         assertEquals(204, response.getStatusCodeValue());
     }
 }
-```
