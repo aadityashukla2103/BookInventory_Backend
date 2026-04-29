@@ -38,42 +38,4 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
-
-    @GetMapping("/count")
-    public long count() {
-        return userService.getAll().size();
-    }
-
-    @GetMapping("/empty")
-    public boolean isEmpty() {
-        return userService.getAll().isEmpty();
-    }
-
-    @GetMapping("/first")
-    public ResponseEntity<UserDto> getFirst() {
-        return userService.getAll().stream().findFirst()
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.noContent().build());
-    }
-
-    
-
-    @GetMapping("/last")
-    public ResponseEntity<UserDto> getLast() {
-        List<UserDto> items = userService.getAll();
-        if (items.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(items.get(items.size() - 1));
-    }
-    @GetMapping("/exists/{userId}")
-    public boolean exists(@PathVariable Integer userId) {
-        try {
-            userService.getById(userId);
-            return true;
-        } catch (ResourceNotFoundException ex) {
-            return false;
-        }
-    }
-
 }

@@ -44,44 +44,5 @@ public class ReviewerController {
         reviewerService.delete(reviewerId);
         return ResponseEntity.noContent().build();
     }
+ }
 
-
-    @GetMapping("/count")
-    public long count() {
-        return reviewerService.getAll().size();
-    }
-
-    @GetMapping("/empty")
-    public boolean isEmpty() {
-        return reviewerService.getAll().isEmpty();
-    }
-
-    @GetMapping("/first")
-    public ResponseEntity<ReviewerDto> getFirst() {
-        return reviewerService.getAll().stream().findFirst()
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.noContent().build());
-    }
-
-    
-
-    @GetMapping("/last")
-    public ResponseEntity<ReviewerDto> getLast() {
-        List<ReviewerDto> items = reviewerService.getAll();
-        if (items.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(items.get(items.size() - 1));
-    }
-
-    @GetMapping("/exists/{reviewerId}")
-    public boolean exists(@PathVariable Integer reviewerId) {
-        try {
-            reviewerService.getById(reviewerId);
-            return true;
-        } catch (ResourceNotFoundException ex) {
-            return false;
-        }
-    }
-
-}
