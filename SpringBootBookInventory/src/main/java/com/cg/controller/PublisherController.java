@@ -1,4 +1,5 @@
 package com.cg.controller;
+import jakarta.validation.Valid;
 
 import com.cg.dto.PublisherDto;
 import com.cg.exception.ResourceNotFoundException;
@@ -25,12 +26,12 @@ public class PublisherController {
     public PublisherDto getById(@PathVariable Integer publisherId) { return publisherService.getById(publisherId); }
 
     @PostMapping
-    public ResponseEntity<PublisherDto> create(@RequestBody PublisherDto dto) {
+    public ResponseEntity<PublisherDto> create(@Valid @RequestBody PublisherDto dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(publisherService.create(dto));
     }
 
     @PutMapping("/{publisherId}")
-    public PublisherDto update(@PathVariable Integer publisherId, @RequestBody PublisherDto dto) {
+    public PublisherDto update(@PathVariable Integer publisherId,@Valid @RequestBody PublisherDto dto) {
         return publisherService.update(publisherId, dto);
     }
 

@@ -1,4 +1,5 @@
 package com.cg.controller;
+import jakarta.validation.Valid;
 
 import com.cg.dto.InventoryDto;
 import com.cg.exception.ResourceNotFoundException;
@@ -29,12 +30,12 @@ public class InventoryController {
     }
 
     @PostMapping
-    public ResponseEntity<InventoryDto> create(@RequestBody InventoryDto dto) {
+    public ResponseEntity<InventoryDto> create(@Valid @RequestBody InventoryDto dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(inventoryService.create(dto));
     }
 
     @PutMapping("/{inventoryId}")
-    public InventoryDto update(@PathVariable Integer inventoryId, @RequestBody InventoryDto dto) {
+    public InventoryDto update(@PathVariable Integer inventoryId,@Valid @RequestBody InventoryDto dto) {
         return inventoryService.update(inventoryId, dto);
     }
 

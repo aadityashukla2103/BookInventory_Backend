@@ -1,4 +1,5 @@
 package com.cg.controller;
+import jakarta.validation.Valid;
 
 import com.cg.dto.ShoppingCartDto;
 import com.cg.exception.ResourceNotFoundException;
@@ -25,12 +26,12 @@ public class ShoppingCartController {
     }
 
     @PostMapping
-    public ResponseEntity<ShoppingCartDto> create(@RequestBody ShoppingCartDto dto) {
+    public ResponseEntity<ShoppingCartDto> create(@Valid @RequestBody ShoppingCartDto dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(shoppingCartService.create(dto));
     }
 
     @PutMapping("/{userId}/{isbn}")
-    public ShoppingCartDto update(@PathVariable Integer userId, @PathVariable String isbn, @RequestBody ShoppingCartDto dto) {
+    public ShoppingCartDto update(@PathVariable Integer userId, @PathVariable String isbn,@Valid @RequestBody ShoppingCartDto dto) {
         return shoppingCartService.update(userId, isbn, dto);
     }
 

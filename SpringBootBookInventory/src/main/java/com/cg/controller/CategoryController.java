@@ -1,4 +1,5 @@
 package com.cg.controller;
+import jakarta.validation.Valid;
 
 import com.cg.dto.CategoryDto;
 import com.cg.exception.ResourceNotFoundException;
@@ -30,12 +31,12 @@ public class CategoryController {
     }
 
     @PostMapping
-    public ResponseEntity<CategoryDto> create(@RequestBody CategoryDto dto) {
+    public ResponseEntity<CategoryDto> create(@Valid @RequestBody CategoryDto dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(categoryService.create(dto));
     }
 
     @PutMapping("/{catId}")
-    public CategoryDto update(@PathVariable Integer catId, @RequestBody CategoryDto dto) {
+    public CategoryDto update(@PathVariable Integer catId,@Valid @RequestBody CategoryDto dto) {
         return categoryService.update(catId, dto);
     }
 

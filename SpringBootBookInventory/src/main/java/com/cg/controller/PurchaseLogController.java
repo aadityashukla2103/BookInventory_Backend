@@ -1,4 +1,5 @@
 package com.cg.controller;
+import jakarta.validation.Valid;
 
 import com.cg.dto.PurchaseLogDto;
 import com.cg.exception.ResourceNotFoundException;
@@ -29,12 +30,12 @@ public class PurchaseLogController {
     }
 
     @PostMapping
-    public ResponseEntity<PurchaseLogDto> create(@RequestBody PurchaseLogDto dto) {
+    public ResponseEntity<PurchaseLogDto> create(@Valid @RequestBody PurchaseLogDto dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(purchaseLogService.create(dto));
     }
 
     @PutMapping("/{userId}/{inventoryId}")
-    public PurchaseLogDto update(@PathVariable Integer userId, @PathVariable Integer inventoryId, @RequestBody PurchaseLogDto dto) {
+    public PurchaseLogDto update(@PathVariable Integer userId, @PathVariable Integer inventoryId,@Valid @RequestBody PurchaseLogDto dto) {
         return purchaseLogService.update(userId, inventoryId, dto);
     }
 
