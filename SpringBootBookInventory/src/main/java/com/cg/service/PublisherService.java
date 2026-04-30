@@ -20,35 +20,65 @@ public class PublisherService {
         this.stateRepository = stateRepository;
     }
 
-    public List<PublisherDto> getAll() { return publisherRepository.findAll().stream().map(this::toDto).toList(); }
-    public PublisherDto getById(Integer id) { return toDto(findEntity(id)); }
+    public List<PublisherDto> getAll() {
+        return publisherRepository.findAll()
+                .stream()
+                .map(this::toDto)
+                .toList();
+    }
+
+    public PublisherDto getById(Integer id) {
+        if (id == null) {
+            throw new IllegalArgumentException("Publisher ID cannot be null");
+        }
+        return toDto(findEntity(id));
+    }
 
     public PublisherDto create(PublisherDto dto) {
+        if (dto == null) {
+            throw new IllegalArgumentException("Publisher data cannot be null");
+        }
+
         Publisher entity = new Publisher();
         entity.setPublisherId(dto.getPublisherId());
         apply(dto, entity);
+
         return toDto(publisherRepository.save(entity));
     }
 
     public PublisherDto update(Integer id, PublisherDto dto) {
+        if (id == null || dto == null) {
+            throw new IllegalArgumentException("Invalid input for update");
+        }
+
         Publisher entity = findEntity(id);
         apply(dto, entity);
+
         return toDto(publisherRepository.save(entity));
     }
 
-    public void delete(Integer id) { publisherRepository.delete(findEntity(id)); }
+    public void delete(Integer id) {
+        if (id == null) {
+            throw new IllegalArgumentException("Publisher ID cannot be null");
+        }
+
+        publisherRepository.delete(findEntity(id));
+    }
 
     private Publisher findEntity(Integer id) {
         return publisherRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Publisher not found with id: " + id));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Publisher not found with id: " + id));
     }
 
     private void apply(PublisherDto dto, Publisher entity) {
         entity.setName(dto.getName());
         entity.setCity(dto.getCity());
+
         if (dto.getStateCode() != null) {
             State state = stateRepository.findById(dto.getStateCode())
-                    .orElseThrow(() -> new ResourceNotFoundException("State not found with id: " + dto.getStateCode()));
+                    .orElseThrow(() ->
+                            new ResourceNotFoundException("State not found with id: " + dto.getStateCode()));
             entity.setState(state);
         } else {
             entity.setState(null);
