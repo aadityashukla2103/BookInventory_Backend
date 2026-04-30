@@ -6,16 +6,16 @@ import jakarta.persistence.*;
 @Table(name = "author")
 public class Author {
 	@Id
-	@Column(name = "\"authorID\"")
+	@Column(name = "authorID")
 	private Integer authorID;
 
-	@Column(name = "\"LastName\"", nullable = false)
+	@Column(name = "LastName", nullable = false)
 	private String lastName;
 
-	@Column(name = "\"FirstName\"", nullable = false)
+	@Column(name = "FirstName", nullable = false)
 	private String firstName;
 
-	@Column(name = "\"Photo\"", length = 1)
+	@Column(name = "Photo", length = 1)
 	private String photo;
 
 	public Author() {

@@ -9,13 +9,13 @@ public class ShoppingCart {
 	private ShoppingCartId id;
 
 	@ManyToOne
-	@MapsId("userID")
-	@JoinColumn(name = "\"UserID\"")
+	@MapsId("userId")
+	@JoinColumn(name = "UserID")
 	private User user;
 
 	@ManyToOne
-	@MapsId("ISBN")
-	@JoinColumn(name = "\"ISBN\"")
+	@MapsId("isbn")
+	@JoinColumn(name = "ISBN")
 	private Book book;
 
 	public ShoppingCart() {

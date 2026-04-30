@@ -10,16 +10,16 @@ import jakarta.persistence.Table;
 public class BookCondition {
 
 	@Id
-	@Column(name = "\"Ranks\"")
+	@Column(name = "Ranks")
 	private Integer ranks;
 
-	@Column(name = "\"Description\"")
+	@Column(name = "Description")
 	private String description;
 
-	@Column(name = "\"FullDescription\"")
+	@Column(name = "FullDescription")
 	private String fullDescription;
 
-	@Column(name = "\"Price\"")
+	@Column(name = "Price")
 	private Double price;
 
 	public Integer getRanks() {

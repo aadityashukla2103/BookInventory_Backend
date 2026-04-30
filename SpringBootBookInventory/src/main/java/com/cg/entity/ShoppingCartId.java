@@ -1,37 +1,41 @@
 package com.cg.entity;
 
 import jakarta.persistence.Embeddable;
+import jakarta.persistence.Column;
 import java.io.Serializable;
 import java.util.Objects;
 
 @Embeddable
 public class ShoppingCartId implements Serializable {
 
-	private Integer userID;
-	private String ISBN;
+	@Column(name = "UserID")
+	private Integer userId;
+	
+	@Column(name = "ISBN")
+	private String isbn;
 
     public ShoppingCartId() {
     }
 
     public ShoppingCartId(Integer userID, String ISBN) {
-        this.userID = userID;
-        this.ISBN = ISBN;
+        this.userId = userID;
+        this.isbn = ISBN;
     }
 
     public Integer getUserID() {
-        return userID;
+        return userId;
     }
 
     public void setUserID(Integer userID) {
-        this.userID = userID;
+        this.userId = userID;
     }
 
     public String getISBN() {
-        return ISBN;
+        return isbn;
     }
 
     public void setISBN(String ISBN) {
-        this.ISBN = ISBN;
+        this.isbn = ISBN;
     }
 
     @Override
@@ -39,12 +43,12 @@ public class ShoppingCartId implements Serializable {
         if (this == o) return true;
         if (!(o instanceof ShoppingCartId)) return false;
         ShoppingCartId that = (ShoppingCartId) o;
-        return Objects.equals(userID, that.userID) &&
-               Objects.equals(ISBN, that.ISBN);
+        return Objects.equals(userId, that.userId) &&
+               Objects.equals(isbn, that.isbn);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userID, ISBN);
+        return Objects.hash(userId, isbn);
     }
 }

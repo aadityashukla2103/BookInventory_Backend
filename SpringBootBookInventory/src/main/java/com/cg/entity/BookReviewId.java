@@ -7,10 +7,10 @@ import jakarta.persistence.Embeddable;
 @Embeddable
 public class BookReviewId implements Serializable {
 
-	@Column(name = "\"ISBN\"")
+	@Column(name = "ISBN")
 	private String isbn;
 
-	@Column(name = "\"ReviewerID\"")
+	@Column(name = "ReviewerID")
 	private Integer reviewerId;
 
 	public BookReviewId() {

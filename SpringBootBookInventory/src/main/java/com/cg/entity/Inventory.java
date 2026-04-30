@@ -15,18 +15,18 @@ public class Inventory {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "\"InventoryID\"")
+	@Column(name = "InventoryID")
 	private Integer inventoryID;
 
 	@ManyToOne
-	@JoinColumn(name = "\"ISBN\"")
+	@JoinColumn(name = "ISBN")
 	private Book book;
 
 	@ManyToOne
-	@JoinColumn(name = "\"Ranks\"")
+	@JoinColumn(name = "Ranks")
 	private BookCondition bookCondition;
 
-	@Column(name = "\"Purchased\"")
+	@Column(name = "Purchased")
 	private Boolean purchased;
 
 	public Integer getInventoryID() {

@@ -7,24 +7,24 @@ import jakarta.persistence.*;
 public class Book {
 
 	@Id
-	@Column(name = "\"ISBN\"", length = 13)
+	@Column(name = "ISBN", length = 13)
 	private String isbn;
 
-	@Column(name = "\"Title\"", length = 70, nullable = false)
+	@Column(name = "Title", length = 70, nullable = false)
 	private String title;
 
-	@Column(name = "\"Description\"", length = 100)
+	@Column(name = "Description", length = 100)
 	private String description;
 
-	@Column(name = "\"Edition\"", length = 30)
+	@Column(name = "Edition", length = 30)
 	private String edition;
 
 	@ManyToOne
-	@JoinColumn(name = "\"Category\"")
+	@JoinColumn(name = "Category")
 	private Category category;
 
 	@ManyToOne
-	@JoinColumn(name = "\"PublisherID\"", nullable = false)
+	@JoinColumn(name = "PublisherID", nullable = false)
 	private Publisher publisher;
 
 	public String getIsbn() {
