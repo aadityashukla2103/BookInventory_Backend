@@ -1,6 +1,7 @@
 package com.cg.service;
 
-import com.cg.dto.UserDto;
+import com.cg.dto.UserRequestDto;
+import com.cg.dto.UserResponseDto;
 import com.cg.entity.PermRole;
 import com.cg.entity.User;
 import com.cg.exception.ResourceNotFoundException;
@@ -22,43 +23,47 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, PermRoleRepository permRoleRepository) {
+    public UserService(UserRepository userRepository,
+                       PermRoleRepository permRoleRepository) {
         this.userRepository = userRepository;
         this.permRoleRepository = permRoleRepository;
     }
 
-    public List<UserDto> getAll() {
+    public List<UserResponseDto> getAll() {
         return userRepository.findAll()
                 .stream()
                 .map(this::toDto)
                 .toList();
     }
 
-    public UserDto getById(Integer id) {
+    public UserResponseDto getById(Integer id) {
         if (id == null) {
             throw new IllegalArgumentException("User ID cannot be null");
         }
+
         return toDto(findEntity(id));
     }
 
-    public UserDto create(UserDto dto) {
+    public UserResponseDto create(UserRequestDto dto) {
         if (dto == null) {
             throw new IllegalArgumentException("User data cannot be null");
         }
 
-        User entity = new User();
-        apply(dto, entity);
-        return toDto(userRepository.save(entity));
+        User user = new User();
+        apply(dto, user);
+
+        return toDto(userRepository.save(user));
     }
 
-    public UserDto update(Integer id, UserDto dto) {
+    public UserResponseDto update(Integer id, UserRequestDto dto) {
         if (id == null || dto == null) {
             throw new IllegalArgumentException("User ID and data cannot be null");
         }
 
-        User entity = findEntity(id);
-        apply(dto, entity);
-        return toDto(userRepository.save(entity));
+        User user = findEntity(id);
+        apply(dto, user);
+
+        return toDto(userRepository.save(user));
     }
 
     public void delete(Integer id) {
@@ -75,39 +80,43 @@ public class UserService {
                         new ResourceNotFoundException("User not found with id: " + id));
     }
 
-    private void apply(UserDto dto, User entity) {
+    private void apply(UserRequestDto dto, User user) {
 
-        entity.setLastName(dto.getLastName());
-        entity.setFirstName(dto.getFirstName());
-        entity.setPhoneNumber(dto.getPhoneNumber());
-        entity.setUserName(dto.getUserName());
+        user.setLastName(dto.getLastName());
+        user.setFirstName(dto.getFirstName());
+        user.setPhoneNumber(dto.getPhoneNumber());
+        user.setUserName(dto.getUserName());
 
         if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
-            entity.setPassword(passwordEncoder.encode(dto.getPassword()));
+            user.setPassword(passwordEncoder.encode(dto.getPassword()));
         }
 
         if (dto.getRoleNumber() != null) {
             PermRole role = permRoleRepository.findById(dto.getRoleNumber())
                     .orElseThrow(() ->
-                            new ResourceNotFoundException("PermRole not found with id: " + dto.getRoleNumber()));
-            entity.setRole(role);
+                            new ResourceNotFoundException(
+                                    "Role not found with id: " + dto.getRoleNumber()
+                            ));
+
+            user.setRole(role);
         } else {
-            entity.setRole(null);
+            user.setRole(null);
         }
     }
 
-    private UserDto toDto(User entity) {
-        UserDto dto = new UserDto();
+    private UserResponseDto toDto(User user) {
 
-        dto.setUserID(entity.getUserID());
-        dto.setLastName(entity.getLastName());
-        dto.setFirstName(entity.getFirstName());
-        dto.setPhoneNumber(entity.getPhoneNumber());
-        dto.setUserName(entity.getUserName());
+        UserResponseDto dto = new UserResponseDto();
+
+        dto.setUserID(user.getUserID());
+        dto.setLastName(user.getLastName());
+        dto.setFirstName(user.getFirstName());
+        dto.setPhoneNumber(user.getPhoneNumber());
+        dto.setUserName(user.getUserName());
 
         dto.setRoleNumber(
-                entity.getRole() != null
-                        ? entity.getRole().getRoleNumber()
+                user.getRole() != null
+                        ? user.getRole().getRoleNumber()
                         : null
         );
 

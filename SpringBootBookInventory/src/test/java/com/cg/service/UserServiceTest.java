@@ -1,23 +1,26 @@
 package com.cg.service;
 
-import com.cg.dto.UserDto;
+import com.cg.dto.UserRequestDto;
+import com.cg.dto.UserResponseDto;
 import com.cg.entity.PermRole;
 import com.cg.entity.User;
 import com.cg.exception.ResourceNotFoundException;
 import com.cg.repo.PermRoleRepository;
 import com.cg.repo.UserRepository;
-import org.junit.jupiter.api.Test;
+
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.lang.reflect.Field;
 import java.util.Arrays;
-import java.util.Optional;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -38,11 +41,11 @@ class UserServiceTest {
     private UserService userService;
 
     private User user;
-    private UserDto dto;
     private PermRole role;
+    private UserRequestDto requestDto;
 
     @BeforeEach
-    void setUp() throws Exception {
+    void setUp() {
 
         role = new PermRole();
         role.setRoleNumber(1);
@@ -56,24 +59,21 @@ class UserServiceTest {
         user.setPassword("encoded123");
         user.setRole(role);
 
-        dto = new UserDto();
-        dto.setFirstName("Aashish");
-        dto.setLastName("Tomar");
-        dto.setPhoneNumber("9876543210");
-        dto.setUserName("aashish");
-        dto.setPassword("12345");
-        dto.setRoleNumber(1);
-
-        Field field = UserService.class.getDeclaredField("passwordEncoder");
-        field.setAccessible(true);
-        field.set(userService, passwordEncoder);
+        requestDto = new UserRequestDto();
+        requestDto.setFirstName("Aashish");
+        requestDto.setLastName("Tomar");
+        requestDto.setPhoneNumber("9876543210");
+        requestDto.setUserName("aashish");
+        requestDto.setPassword("12345");
+        requestDto.setRoleNumber(1);
     }
 
     @Test
     void testGetAll() {
+
         when(userRepository.findAll()).thenReturn(Arrays.asList(user));
 
-        List<UserDto> result = userService.getAll();
+        List<UserResponseDto> result = userService.getAll();
 
         assertEquals(1, result.size());
         assertEquals("Aashish", result.get(0).getFirstName());
@@ -81,15 +81,17 @@ class UserServiceTest {
 
     @Test
     void testGetById() {
+
         when(userRepository.findById(1)).thenReturn(Optional.of(user));
 
-        UserDto result = userService.getById(1);
+        UserResponseDto result = userService.getById(1);
 
         assertEquals("Aashish", result.getFirstName());
     }
 
     @Test
     void testGetById_NotFound() {
+
         when(userRepository.findById(1)).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class,
@@ -98,11 +100,12 @@ class UserServiceTest {
 
     @Test
     void testCreate() {
+
         when(passwordEncoder.encode("12345")).thenReturn("encoded123");
         when(permRoleRepository.findById(1)).thenReturn(Optional.of(role));
         when(userRepository.save(any(User.class))).thenReturn(user);
 
-        UserDto result = userService.create(dto);
+        UserResponseDto result = userService.create(requestDto);
 
         assertEquals("Aashish", result.getFirstName());
         verify(userRepository, times(1)).save(any(User.class));
@@ -110,18 +113,20 @@ class UserServiceTest {
 
     @Test
     void testUpdate() {
+
         when(userRepository.findById(1)).thenReturn(Optional.of(user));
         when(passwordEncoder.encode("12345")).thenReturn("encoded123");
         when(permRoleRepository.findById(1)).thenReturn(Optional.of(role));
         when(userRepository.save(any(User.class))).thenReturn(user);
 
-        UserDto result = userService.update(1, dto);
+        UserResponseDto result = userService.update(1, requestDto);
 
         assertEquals("Tomar", result.getLastName());
     }
 
     @Test
     void testDelete() {
+
         when(userRepository.findById(1)).thenReturn(Optional.of(user));
 
         userService.delete(1);
@@ -131,18 +136,20 @@ class UserServiceTest {
 
     @Test
     void testCreate_RoleNotFound() {
+
         when(passwordEncoder.encode("12345")).thenReturn("encoded123");
         when(permRoleRepository.findById(1)).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class,
-                () -> userService.create(dto));
+                () -> userService.create(requestDto));
     }
 
     @Test
     void testUpdate_UserNotFound() {
+
         when(userRepository.findById(1)).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class,
-                () -> userService.update(1, dto));
+                () -> userService.update(1, requestDto));
     }
 }
