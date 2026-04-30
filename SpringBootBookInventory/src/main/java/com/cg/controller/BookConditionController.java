@@ -1,4 +1,5 @@
 package com.cg.controller;
+import jakarta.validation.Valid;
 
 import com.cg.dto.BookConditionDto;
 import com.cg.exception.ResourceNotFoundException;
@@ -30,12 +31,12 @@ public class BookConditionController {
     }
 
     @PostMapping
-    public ResponseEntity<BookConditionDto> create(@RequestBody BookConditionDto dto) {
+    public ResponseEntity<BookConditionDto> create(@Valid @RequestBody BookConditionDto dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(bookConditionService.create(dto));
     }
 
     @PutMapping("/{ranks}")
-    public BookConditionDto update(@PathVariable Integer ranks, @RequestBody BookConditionDto dto) {
+    public BookConditionDto update(@PathVariable Integer ranks,@Valid @RequestBody BookConditionDto dto) {
         return bookConditionService.update(ranks, dto);
     }
 

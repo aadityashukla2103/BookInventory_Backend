@@ -1,4 +1,5 @@
 package com.cg.controller;
+import jakarta.validation.Valid;
 
 import com.cg.dto.StateDto;
 import com.cg.exception.ResourceNotFoundException;
@@ -30,12 +31,12 @@ public class StateController {
 	}
 
 	@PostMapping
-	public ResponseEntity<StateDto> create(@RequestBody StateDto dto) {
+	public ResponseEntity<StateDto> create(@Valid @RequestBody StateDto dto) {
 		return ResponseEntity.status(HttpStatus.CREATED).body(stateService.create(dto));
 	}
 
 	@PutMapping("/{stateCode}")
-	public StateDto update(@PathVariable String stateCode, @RequestBody StateDto dto) {
+	public StateDto update(@PathVariable String stateCode,@Valid @RequestBody StateDto dto) {
 		return stateService.update(stateCode, dto);
 	}
 

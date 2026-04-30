@@ -1,4 +1,5 @@
 package com.cg.controller;
+import jakarta.validation.Valid;
 
 import com.cg.dto.PermRoleDto;
 import com.cg.exception.ResourceNotFoundException;
@@ -30,12 +31,12 @@ public class PermRoleController {
     }
 
     @PostMapping
-    public ResponseEntity<PermRoleDto> create(@RequestBody PermRoleDto dto) {
+    public ResponseEntity<PermRoleDto> create(@Valid @RequestBody PermRoleDto dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(permRoleService.create(dto));
     }
 
     @PutMapping("/{roleNumber}")
-    public PermRoleDto update(@PathVariable Integer roleNumber, @RequestBody PermRoleDto dto) {
+    public PermRoleDto update(@PathVariable Integer roleNumber,@Valid @RequestBody PermRoleDto dto) {
         return permRoleService.update(roleNumber, dto);
     }
 

@@ -1,4 +1,5 @@
 package com.cg.controller;
+import jakarta.validation.Valid;
 
 import com.cg.dto.ReviewerDto;
 import com.cg.exception.ResourceNotFoundException;
@@ -30,12 +31,12 @@ public class ReviewerController {
     }
 
     @PostMapping
-    public ResponseEntity<ReviewerDto> create(@RequestBody ReviewerDto dto) {
+    public ResponseEntity<ReviewerDto> create(@Valid @RequestBody ReviewerDto dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(reviewerService.create(dto));
     }
 
     @PutMapping("/{reviewerId}")
-    public ReviewerDto update(@PathVariable Integer reviewerId, @RequestBody ReviewerDto dto) {
+    public ReviewerDto update(@PathVariable Integer reviewerId,@Valid @RequestBody ReviewerDto dto) {
         return reviewerService.update(reviewerId, dto);
     }
 

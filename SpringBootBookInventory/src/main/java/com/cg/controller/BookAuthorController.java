@@ -1,5 +1,5 @@
 package com.cg.controller;
-
+import jakarta.validation.Valid;
 import com.cg.dto.BookAuthorDto;
 import com.cg.exception.ResourceNotFoundException;
 import com.cg.service.BookAuthorService;
@@ -29,13 +29,13 @@ public class BookAuthorController {
 	}
 
 	@PostMapping
-	public ResponseEntity<BookAuthorDto> create(@RequestBody BookAuthorDto dto) {
+	public ResponseEntity<BookAuthorDto> create(@Valid @RequestBody BookAuthorDto dto) {
 		return ResponseEntity.status(HttpStatus.CREATED).body(bookAuthorService.create(dto));
 	}
 
 	@PutMapping("/{isbn}/{authorId}")
 	public BookAuthorDto update(@PathVariable String isbn, @PathVariable Integer authorId,
-			@RequestBody BookAuthorDto dto) {
+			@Valid @RequestBody BookAuthorDto dto) {
 		return bookAuthorService.update(isbn, authorId, dto);
 	}
 
