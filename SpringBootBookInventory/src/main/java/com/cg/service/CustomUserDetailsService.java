@@ -19,14 +19,22 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username)
             throws UsernameNotFoundException {
 
+        if (username == null || username.isBlank()) {
+            throw new UsernameNotFoundException("Username cannot be null or empty");
+        }
+
         User user = userRepository.findByUserName(username)
-            .orElseThrow(() ->
-                new UsernameNotFoundException("User not found"));
+                .orElseThrow(() ->
+                        new UsernameNotFoundException("User not found with username: " + username));
+
+        if (user.getRole() == null) {
+            throw new UsernameNotFoundException("User has no role assigned");
+        }
 
         return org.springframework.security.core.userdetails.User
-            .withUsername(user.getUserName())
-            .password(user.getPassword())
-            .roles(user.getRole().getPermRole())
-            .build();
+                .withUsername(user.getUserName())
+                .password(user.getPassword())
+                .roles(user.getRole().getPermRole())
+                .build();
     }
 }

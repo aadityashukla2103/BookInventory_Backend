@@ -19,44 +19,75 @@ public class PurchaseLogService {
     private final UserRepository userRepository;
     private final InventoryRepository inventoryRepository;
 
-    public PurchaseLogService(PurchaseLogRepository purchaseLogRepository, UserRepository userRepository, InventoryRepository inventoryRepository) {
+    public PurchaseLogService(PurchaseLogRepository purchaseLogRepository,
+                              UserRepository userRepository,
+                              InventoryRepository inventoryRepository) {
         this.purchaseLogRepository = purchaseLogRepository;
         this.userRepository = userRepository;
         this.inventoryRepository = inventoryRepository;
     }
 
-    public List<PurchaseLogDto> getAll() { return purchaseLogRepository.findAll().stream().map(this::toDto).toList(); }
+    public List<PurchaseLogDto> getAll() {
+        return purchaseLogRepository.findAll()
+                .stream()
+                .map(this::toDto)
+                .toList();
+    }
 
     public PurchaseLogDto getById(Integer userId, Integer inventoryId) {
+        if (userId == null || inventoryId == null) {
+            throw new IllegalArgumentException("User ID and Inventory ID cannot be null");
+        }
         return toDto(findEntity(new PurchaseLogId(userId, inventoryId)));
     }
 
     public PurchaseLogDto create(PurchaseLogDto dto) {
+        if (dto == null) {
+            throw new IllegalArgumentException("PurchaseLog data cannot be null");
+        }
+
         PurchaseLog entity = new PurchaseLog();
         apply(dto, entity);
+
         return toDto(purchaseLogRepository.save(entity));
     }
 
     public PurchaseLogDto update(Integer userId, Integer inventoryId, PurchaseLogDto dto) {
+        if (userId == null || inventoryId == null || dto == null) {
+            throw new IllegalArgumentException("Invalid input for update");
+        }
+
         PurchaseLog entity = findEntity(new PurchaseLogId(userId, inventoryId));
         apply(dto, entity);
+
         return toDto(purchaseLogRepository.save(entity));
     }
 
     public void delete(Integer userId, Integer inventoryId) {
+        if (userId == null || inventoryId == null) {
+            throw new IllegalArgumentException("User ID and Inventory ID cannot be null");
+        }
+
         purchaseLogRepository.delete(findEntity(new PurchaseLogId(userId, inventoryId)));
     }
 
     private PurchaseLog findEntity(PurchaseLogId id) {
         return purchaseLogRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("PurchaseLog not found for user " + id.getUserID() + " and inventory " + id.getInventoryID()));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "PurchaseLog not found for user "
+                                        + id.getUserID() + " and inventory " + id.getInventoryID()));
     }
 
     private void apply(PurchaseLogDto dto, PurchaseLog entity) {
         User user = userRepository.findById(dto.getUserID())
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + dto.getUserID()));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("User not found with id: " + dto.getUserID()));
+
         Inventory inventory = inventoryRepository.findById(dto.getInventoryID())
-                .orElseThrow(() -> new ResourceNotFoundException("Inventory not found with id: " + dto.getInventoryID()));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Inventory not found with id: " + dto.getInventoryID()));
+
         entity.setId(new PurchaseLogId(dto.getUserID(), dto.getInventoryID()));
         entity.setUser(user);
         entity.setInventory(inventory);

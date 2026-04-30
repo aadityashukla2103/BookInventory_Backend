@@ -19,44 +19,76 @@ public class ShoppingCartService {
     private final UserRepository userRepository;
     private final BookRepository bookRepository;
 
-    public ShoppingCartService(ShoppingCartRepository shoppingCartRepository, UserRepository userRepository, BookRepository bookRepository) {
+    public ShoppingCartService(ShoppingCartRepository shoppingCartRepository,
+                               UserRepository userRepository,
+                               BookRepository bookRepository) {
         this.shoppingCartRepository = shoppingCartRepository;
         this.userRepository = userRepository;
         this.bookRepository = bookRepository;
     }
 
-    public List<ShoppingCartDto> getAll() { return shoppingCartRepository.findAll().stream().map(this::toDto).toList(); }
+    public List<ShoppingCartDto> getAll() {
+        return shoppingCartRepository.findAll()
+                .stream()
+                .map(this::toDto)
+                .toList();
+    }
 
     public ShoppingCartDto getById(Integer userId, String isbn) {
+        if (userId == null || isbn == null || isbn.isBlank()) {
+            throw new IllegalArgumentException("User ID and ISBN must not be null or empty");
+        }
+
         return toDto(findEntity(new ShoppingCartId(userId, isbn)));
     }
 
     public ShoppingCartDto create(ShoppingCartDto dto) {
+        if (dto == null) {
+            throw new IllegalArgumentException("ShoppingCart data cannot be null");
+        }
+
         ShoppingCart entity = new ShoppingCart();
         apply(dto, entity);
+
         return toDto(shoppingCartRepository.save(entity));
     }
 
     public ShoppingCartDto update(Integer userId, String isbn, ShoppingCartDto dto) {
+        if (userId == null || isbn == null || isbn.isBlank() || dto == null) {
+            throw new IllegalArgumentException("Invalid input for update");
+        }
+
         ShoppingCart entity = findEntity(new ShoppingCartId(userId, isbn));
         apply(dto, entity);
+
         return toDto(shoppingCartRepository.save(entity));
     }
 
     public void delete(Integer userId, String isbn) {
+        if (userId == null || isbn == null || isbn.isBlank()) {
+            throw new IllegalArgumentException("User ID and ISBN must not be null or empty");
+        }
+
         shoppingCartRepository.delete(findEntity(new ShoppingCartId(userId, isbn)));
     }
 
     private ShoppingCart findEntity(ShoppingCartId id) {
         return shoppingCartRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("ShoppingCart not found for user " + id.getUserID() + " and isbn " + id.getISBN()));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "ShoppingCart not found for user "
+                                        + id.getUserID() + " and isbn " + id.getISBN()));
     }
 
     private void apply(ShoppingCartDto dto, ShoppingCart entity) {
         User user = userRepository.findById(dto.getUserID())
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + dto.getUserID()));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("User not found with id: " + dto.getUserID()));
+
         Book book = bookRepository.findById(dto.getIsbn())
-                .orElseThrow(() -> new ResourceNotFoundException("Book not found with id: " + dto.getIsbn()));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Book not found with id: " + dto.getIsbn()));
+
         entity.setId(new ShoppingCartId(dto.getUserID(), dto.getIsbn()));
         entity.setUser(user);
         entity.setBook(book);
