@@ -163,4 +163,4 @@ export class CartComponent implements OnInit {
   private safeList<T extends ApiRecord>(endpoint: string): Observable<T[]> {
     return this.api.list<T>(endpoint).pipe(catchError(() => of([])));
   }
-}git
+}
