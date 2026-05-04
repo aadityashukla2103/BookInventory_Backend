@@ -1,11 +1,11 @@
-<section class="container-fluid px-0">
-  <div class="d-flex flex-wrap align-items-end justify-content-between gap-3 mb-4">
+<section class="page-shell container-fluid px-0">
+  <div class="page-heading d-flex flex-wrap align-items-end justify-content-between gap-3">
     <div>
+      <div class="auth-kicker mb-2">Overview</div>
       <h1 class="display-6 fw-bold mb-1">Dashboard</h1>
       <p class="text-muted mb-0">A quick view of catalog activity, stock, and user carts.</p>
     </div>
     <a class="btn btn-primary" routerLink="/catalog">
-
       <span>Open Catalog</span>
     </a>
   </div>
@@ -14,12 +14,10 @@
 
   <div class="row g-3 mb-4">
     <div class="col-md-6 col-xl-3" *ngFor="let stat of stats">
-      <div class="card h-100">
-        <div class="card-body d-flex justify-content-between gap-3">
-          <div>
-            <div class="text-muted small fw-semibold">{{ stat.label }}</div>
-            <div class="display-6 fw-bold">{{ stat.value }}</div>
-          </div>
+      <div class="stat-card card h-100">
+        <div class="card-body">
+          <div class="text-muted small fw-semibold mb-2">{{ stat.label }}</div>
+          <div class="stat-value display-6 fw-bold">{{ stat.value }}</div>
         </div>
       </div>
     </div>
@@ -27,17 +25,16 @@
 
   <div class="row g-3">
     <div class="col-xl-7">
-      <div class="card h-100">
+      <div class="data-card card h-100">
         <div class="card-body">
           <div class="d-flex align-items-center justify-content-between mb-3">
             <h2 class="h5 mb-0">Recent Books</h2>
             <a class="btn btn-sm btn-outline-primary" routerLink="/manage-books" *ngIf="isAdmin$ | async">
-
               <span>Manage</span>
             </a>
           </div>
           <div class="table-responsive" *ngIf="recentBooks.length; else noBooks">
-            <table class="table align-middle">
+            <table class="table table-hover align-middle">
               <thead>
                 <tr>
                   <th>ISBN</th>
@@ -59,23 +56,23 @@
             </table>
           </div>
           <ng-template #noBooks>
-            <div class="alert alert-secondary text-center mb-0">No books found.</div>
+            <div class="empty-panel alert alert-secondary text-center mb-0">No books found.</div>
           </ng-template>
         </div>
       </div>
     </div>
 
     <div class="col-xl-5">
-      <div class="card h-100">
+      <div class="data-card card h-100">
         <div class="card-body">
           <h2 class="h5 mb-3">Inventory Snapshot</h2>
           <div class="d-grid gap-3">
             <div>
-              <div class="d-flex justify-content-between small mb-1">
-                <span>Available copies</span>
+              <div class="d-flex justify-content-between small mb-2">
+                <span class="text-muted">Available copies</span>
                 <span class="fw-semibold">{{ availableCopies }} / {{ totalCopies }}</span>
               </div>
-              <div class="progress" style="height: 10px">
+              <div class="progress progress-thin">
                 <div class="progress-bar bg-success" [style.width.%]="availabilityPercent"></div>
               </div>
             </div>
@@ -84,7 +81,6 @@
               <span class="fw-bold">{{ estimatedAvailableValue | currency }}</span>
             </div>
             <a class="btn btn-outline-primary" routerLink="/manage/inventories">
-
               <span>Manage Inventory</span>
             </a>
           </div>
@@ -93,7 +89,7 @@
     </div>
   </div>
 
-  <div class="card mt-3" *ngIf="isAdmin$ | async">
+  <div class="data-card card mt-3" *ngIf="isAdmin$ | async">
     <div class="card-body">
       <div class="d-flex align-items-center justify-content-between gap-3 mb-3">
         <h2 class="h5 mb-0">Management Shortcuts</h2>
@@ -101,42 +97,34 @@
       </div>
       <div class="row g-3">
         <div class="col-sm-6 col-xl-3">
-          <a class="card h-100 text-decoration-none text-body" routerLink="/manage-books">
-            <div class="card-body d-flex align-items-center gap-3">
-              <div>
-                <div class="fw-semibold">Manage Books</div>
-                <div class="text-muted small">Titles and authors</div>
-              </div>
+          <a class="shortcut-card card h-100 text-decoration-none text-body" routerLink="/manage-books">
+            <div class="card-body">
+              <div class="fw-semibold">Manage Books</div>
+              <div class="text-muted small">Titles and authors</div>
             </div>
           </a>
         </div>
         <div class="col-sm-6 col-xl-3">
-          <a class="card h-100 text-decoration-none text-body" routerLink="/manage/authors">
-            <div class="card-body d-flex align-items-center gap-3">
-              <div>
-                <div class="fw-semibold">Authors</div>
-                <div class="text-muted small">Creator records</div>
-              </div>
+          <a class="shortcut-card card h-100 text-decoration-none text-body" routerLink="/manage/authors">
+            <div class="card-body">
+              <div class="fw-semibold">Authors</div>
+              <div class="text-muted small">Creator records</div>
             </div>
           </a>
         </div>
         <div class="col-sm-6 col-xl-3">
-          <a class="card h-100 text-decoration-none text-body" routerLink="/manage/categories">
-            <div class="card-body d-flex align-items-center gap-3">
-              <div>
-                <div class="fw-semibold">Categories</div>
-                <div class="text-muted small">Catalog groups</div>
-              </div>
+          <a class="shortcut-card card h-100 text-decoration-none text-body" routerLink="/manage/categories">
+            <div class="card-body">
+              <div class="fw-semibold">Categories</div>
+              <div class="text-muted small">Catalog groups</div>
             </div>
           </a>
         </div>
         <div class="col-sm-6 col-xl-3">
-          <a class="card h-100 text-decoration-none text-body" routerLink="/manage/inventories">
-            <div class="card-body d-flex align-items-center gap-3">
-              <div>
-                <div class="fw-semibold">Inventory</div>
-                <div class="text-muted small">Stock copies</div>
-              </div>
+          <a class="shortcut-card card h-100 text-decoration-none text-body" routerLink="/manage/inventories">
+            <div class="card-body">
+              <div class="fw-semibold">Inventory</div>
+              <div class="text-muted small">Stock copies</div>
             </div>
           </a>
         </div>

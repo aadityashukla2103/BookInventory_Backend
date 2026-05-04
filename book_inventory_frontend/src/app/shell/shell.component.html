@@ -1,7 +1,8 @@
-<div class="container-fluid">
+<div class="app-shell container-fluid">
   <div class="row min-vh-100">
-    <aside class="col-12 col-lg-3 col-xl-2 bg-light border-end p-3">
+    <aside class="app-sidebar col-12 col-lg-3 col-xl-2 p-3">
       <div class="d-flex align-items-center gap-3 mb-4">
+        <div class="brand-badge">BI</div>
         <div>
           <div class="fw-bold fs-5">Book Inventory</div>
           <div class="text-muted small">Spring Boot API</div>
@@ -10,16 +11,13 @@
 
       <div class="text-uppercase text-muted small fw-semibold mb-2">Main</div>
       <nav class="nav nav-pills flex-column gap-1">
-        <a class="nav-link d-flex align-items-center gap-2 text-dark" routerLink="/dashboard" routerLinkActive="active">
-
+        <a class="nav-link d-flex align-items-center gap-2" routerLink="/dashboard" routerLinkActive="active">
           <span>Dashboard</span>
         </a>
-        <a class="nav-link d-flex align-items-center gap-2 text-dark" routerLink="/catalog" routerLinkActive="active">
-
+        <a class="nav-link d-flex align-items-center gap-2" routerLink="/catalog" routerLinkActive="active">
           <span>Catalog</span>
         </a>
-        <a class="nav-link d-flex align-items-center gap-2 text-dark" routerLink="/cart" routerLinkActive="active">
-
+        <a class="nav-link d-flex align-items-center gap-2" routerLink="/cart" routerLinkActive="active">
           <span>Cart</span>
         </a>
       </nav>
@@ -27,31 +25,28 @@
       <ng-container *ngIf="isAdmin$ | async">
         <div class="text-uppercase text-muted small fw-semibold mt-4 mb-2">Management</div>
         <nav class="nav nav-pills flex-column gap-1">
-          <a class="nav-link d-flex align-items-center gap-2 text-dark" routerLink="/manage-books" routerLinkActive="active">
-
+          <a class="nav-link d-flex align-items-center gap-2" routerLink="/manage-books" routerLinkActive="active">
             <span>Manage Books</span>
           </a>
           <a
             *ngFor="let resource of adminResources"
-            class="nav-link d-flex align-items-center gap-2 text-dark"
+            class="nav-link d-flex align-items-center gap-2"
             [routerLink]="['/manage', resource.key]"
             routerLinkActive="active"
           >
-
             <span>{{ resource.title }}</span>
           </a>
         </nav>
       </ng-container>
     </aside>
 
-    <main class="col p-0">
-      <header class="d-flex align-items-center justify-content-between gap-3 border-bottom bg-white p-3">
+    <main class="app-main col p-0">
+      <header class="app-topbar d-flex align-items-center justify-content-between gap-3 border-bottom p-3">
         <div *ngIf="authState$ | async as auth">
           <div class="fw-semibold">{{ auth.username || 'Signed in' }}</div>
           <div class="text-muted small">{{ auth.roles.length ? auth.roles.join(', ') : 'Authenticated user' }}</div>
         </div>
         <button class="btn btn-outline-danger" type="button" (click)="logout()">
-
           <span>Logout</span>
         </button>
       </header>

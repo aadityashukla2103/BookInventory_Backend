@@ -1,16 +1,15 @@
-<section class="container-fluid px-0">
-  <div class="d-flex flex-wrap align-items-end justify-content-between gap-3 mb-4">
+<section class="page-shell container-fluid px-0">
+  <div class="page-heading d-flex flex-wrap align-items-end justify-content-between gap-3">
     <div>
+      <div class="auth-kicker mb-2">Book Record</div>
       <h1 class="display-6 fw-bold mb-1">{{ book?.title || 'Book Detail' }}</h1>
       <p class="text-muted mb-0">{{ book?.isbn || 'Loading selected book.' }}</p>
     </div>
     <div class="d-flex gap-2">
       <a class="btn btn-outline-secondary" routerLink="/catalog">
-
         <span>Catalog</span>
       </a>
       <a class="btn btn-primary" [routerLink]="['/manage-books', book.isbn, 'edit']" *ngIf="book && (isAdmin$ | async)">
-
         <span>Edit</span>
       </a>
     </div>
@@ -22,7 +21,7 @@
   <ng-container *ngIf="book; else loadingDetail">
     <div class="row g-3">
       <article class="col-lg-7">
-        <div class="card h-100">
+        <div class="data-card card h-100">
           <div class="card-body">
             <div class="d-flex align-items-start justify-content-between gap-3 border-bottom pb-3 mb-3">
               <div>
@@ -37,23 +36,23 @@
             <dl class="row g-3 mb-0">
               <div class="col-12">
                 <dt>Description</dt>
-                <dd>{{ book.description || 'No description available.' }}</dd>
+                <dd class="text-muted mb-0">{{ book.description || 'No description available.' }}</dd>
               </div>
               <div class="col-sm-6">
                 <dt>Category</dt>
-                <dd>{{ book.categoryName || '-' }}</dd>
+                <dd class="text-muted mb-0">{{ book.categoryName || '-' }}</dd>
               </div>
               <div class="col-sm-6">
                 <dt>Publisher</dt>
-                <dd>{{ book.publisherName || '-' }}</dd>
+                <dd class="text-muted mb-0">{{ book.publisherName || '-' }}</dd>
               </div>
               <div class="col-sm-6">
                 <dt>Authors</dt>
-                <dd>{{ book.authorNames.length ? book.authorNames.join(', ') : 'Unassigned' }}</dd>
+                <dd class="text-muted mb-0">{{ book.authorNames.length ? book.authorNames.join(', ') : 'Unassigned' }}</dd>
               </div>
               <div class="col-sm-6">
                 <dt>Edition</dt>
-                <dd>{{ book.edition || '-' }}</dd>
+                <dd class="text-muted mb-0">{{ book.edition || '-' }}</dd>
               </div>
             </dl>
           </div>
@@ -61,11 +60,11 @@
       </article>
 
       <aside class="col-lg-5">
-        <div class="card h-100">
+        <div class="data-card card h-100">
           <div class="card-body">
             <h2 class="h5 mb-3">Reviews</h2>
             <div class="d-grid gap-2 mb-4" *ngIf="reviews.length; else noReviews">
-              <div class="card" *ngFor="let review of reviews">
+              <div class="review-card card" *ngFor="let review of reviews">
                 <div class="card-body py-2">
                   <div class="d-flex justify-content-between gap-3">
                     <strong>{{ review.reviewerName }}</strong>
@@ -90,7 +89,6 @@
                 <textarea id="comments" class="form-control" rows="3" maxlength="255" formControlName="comments"></textarea>
               </div>
               <button class="btn btn-primary" type="submit" [disabled]="reviewForm.invalid || savingReview">
-
                 <span>{{ savingReview ? 'Saving' : 'Add Review' }}</span>
               </button>
             </form>
@@ -101,6 +99,6 @@
   </ng-container>
 
   <ng-template #loadingDetail>
-    <div class="alert alert-secondary text-center">{{ loading ? 'Loading book detail...' : 'Book not found.' }}</div>
+    <div class="empty-panel alert alert-secondary text-center">{{ loading ? 'Loading book detail...' : 'Book not found.' }}</div>
   </ng-template>
 </section>
