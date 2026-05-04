@@ -1,0 +1,35 @@
+.auth-screen {
+  display: flex;
+  min-height: 100vh;
+}
+
+.auth-panel {
+  width: 400px;
+  padding: 2rem;
+  margin: auto;
+}
+
+.auth-art {
+  flex: 1;
+  background: #f8f9fa;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.auth-copy {
+  max-width: 400px;
+}
+
+.brand-mark {
+  font-size: 2rem;
+}
+
+.page-title {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.page-subtitle {
+  color: #6c757d;
+}
