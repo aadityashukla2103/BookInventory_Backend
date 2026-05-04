@@ -1,146 +1,218 @@
 <section class="container-fluid px-0">
+
+  <!-- HEADER -->
   <div class="d-flex flex-wrap align-items-end justify-content-between gap-3 mb-4">
     <div>
       <h1 class="display-6 fw-bold mb-1">Dashboard</h1>
-      <p class="text-muted mb-0">A quick view of catalog activity, stock, and user carts.</p>
+      <p class="text-muted mb-0">
+        A quick view of catalog activity, stock, and user carts.
+      </p>
     </div>
     <a class="btn btn-primary" routerLink="/catalog">
-
-      <span>Open Catalog</span>
+      Open Catalog
     </a>
   </div>
 
   <div class="alert alert-danger" *ngIf="error">{{ error }}</div>
 
+  <!-- STATS -->
   <div class="row g-3 mb-4">
-    <div class="col-md-6 col-xl-3" *ngFor="let stat of stats">
+   <div class="col-md-6 col-xl-3" *ngFor="let stat of stats"
+  [hidden]="stat.label === 'Cart Rows' || (!(isAdmin$ | async) && stat.label === 'Users')">
+
       <div class="card h-100">
-        <div class="card-body d-flex justify-content-between gap-3">
-          <div>
-            <div class="text-muted small fw-semibold">{{ stat.label }}</div>
-            <div class="display-6 fw-bold">{{ stat.value }}</div>
-          </div>
+        <div class="card-body">
+          <div class="text-muted small fw-semibold">{{ stat.label }}</div>
+          <div class="display-6 fw-bold">{{ stat.value }}</div>
         </div>
       </div>
+
     </div>
   </div>
 
   <div class="row g-3">
-    <div class="col-xl-7">
+
+    <!-- ================= USER VIEW ================= -->
+    <div class="col-12" *ngIf="!(isAdmin$ | async)">
       <div class="card h-100">
         <div class="card-body">
-          <div class="d-flex align-items-center justify-content-between mb-3">
-            <h2 class="h5 mb-0">Recent Books</h2>
-            <a class="btn btn-sm btn-outline-primary" routerLink="/manage-books" *ngIf="isAdmin$ | async">
 
-              <span>Manage</span>
-            </a>
-          </div>
-          <div class="table-responsive" *ngIf="recentBooks.length; else noBooks">
+          <h2 class="h5 mb-3">Recent Books</h2>
+
+          <!-- TABLE -->
+          <div class="table-responsive" *ngIf="recentBooks.length">
             <table class="table align-middle">
               <thead>
                 <tr>
-                  <th>ISBN</th>
-                  <th>Title</th>
-                  <th>Edition</th>
-                  <th>Publisher</th>
+                  <th>Book</th>
                 </tr>
               </thead>
+
               <tbody>
-                <tr *ngFor="let book of recentBooks">
-                  <td class="fw-semibold">{{ book.isbn }}</td>
+                <tr *ngFor="let book of recentBooks" class="border-bottom">
+
                   <td>
-                    <a class="fw-semibold text-decoration-none" [routerLink]="['/books', book.isbn]">{{ book.title }}</a>
+                    <a class="fw-semibold text-decoration-none text-primary" [routerLink]="['/books', book['isbn']]">
+                      {{ book['title'] }}
+                    </a>
+
+                    <div class="text-muted small">
+                      ISBN: {{ book['isbn'] }} •
+                      {{ book['edition'] ? 'Edition ' + book['edition'] : '' }}
+                    </div>
+
+                    <div class="text-muted small">
+                      Publisher: {{ book['publisherName'] || '-' }} •
+                      Category: {{ book['categoryName'] || '-' }}
+                    </div>
                   </td>
-                  <td>{{ book.edition || '-' }}</td>
-                  <td>{{ book.publisherId || '-' }}</td>
+
                 </tr>
               </tbody>
             </table>
           </div>
-          <ng-template #noBooks>
-            <div class="alert alert-secondary text-center mb-0">No books found.</div>
-          </ng-template>
+
+          <!-- NO DATA -->
+          <div *ngIf="!recentBooks.length" class="alert alert-secondary text-center mb-0">
+            No books found.
+          </div>
+
         </div>
       </div>
     </div>
 
-    <div class="col-xl-5">
+    <div class="col-xl-7" *ngIf="isAdmin$ | async">
+      <div class="card h-100">
+        <div class="card-body">
+
+          <div class="d-flex justify-content-between mb-3">
+            <h2 class="h5 mb-0">Recent Books</h2>
+            <a class="btn btn-sm btn-outline-primary" routerLink="/manage-books">
+              Manage
+            </a>
+          </div>
+
+          <!-- TABLE -->
+          <div class="table-responsive" *ngIf="recentBooks.length">
+            <table class="table align-middle">
+              <thead>
+                <tr>
+                  <th>Book</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr *ngFor="let book of recentBooks" class="border-bottom">
+
+                  <td>
+                    <a class="fw-semibold text-decoration-none text-primary" [routerLink]="['/books', book['isbn']]">
+                      {{ book['title'] }}
+                    </a>
+
+                    <div class="text-muted small">
+                      ISBN: {{ book['isbn'] }} •
+                      {{ book['edition'] ? 'Edition ' + book['edition'] : '' }}
+                    </div>
+
+                    <div class="text-muted small">
+                      Publisher: {{ book['publisherName'] || '-' }} •
+                      Category: {{ book['categoryName'] || '-' }}
+                    </div>
+                  </td>
+
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- NO DATA -->
+          <div *ngIf="!recentBooks.length" class="alert alert-secondary text-center mb-0">
+            No books found.
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- INVENTORY (ADMIN ONLY) -->
+    <div class="col-xl-5" *ngIf="isAdmin$ | async">
       <div class="card h-100">
         <div class="card-body">
           <h2 class="h5 mb-3">Inventory Snapshot</h2>
-          <div class="d-grid gap-3">
-            <div>
-              <div class="d-flex justify-content-between small mb-1">
-                <span>Available copies</span>
-                <span class="fw-semibold">{{ availableCopies }} / {{ totalCopies }}</span>
-              </div>
-              <div class="progress" style="height: 10px">
-                <div class="progress-bar bg-success" [style.width.%]="availabilityPercent"></div>
-              </div>
-            </div>
-            <div class="d-flex justify-content-between border-top pt-3">
-              <span class="text-muted">Estimated unsold value</span>
-              <span class="fw-bold">{{ estimatedAvailableValue | currency }}</span>
-            </div>
-            <a class="btn btn-outline-primary" routerLink="/manage/inventories">
 
-              <span>Manage Inventory</span>
-            </a>
+          <div>
+            <div class="d-flex justify-content-between small mb-1">
+              <span>Available copies</span>
+              <span class="fw-semibold">
+                {{ availableCopies }} / {{ totalCopies }}
+              </span>
+            </div>
+
+            <div class="progress" style="height: 10px">
+              <div class="progress-bar bg-success" [style.width.%]="availabilityPercent">
+              </div>
+            </div>
           </div>
+
+          <a class="btn btn-primary mt-3 w-100" routerLink="/catalog">
+            Browse Books
+          </a>
         </div>
       </div>
     </div>
+
   </div>
 
+  <!-- ADMIN SHORTCUTS -->
   <div class="card mt-3" *ngIf="isAdmin$ | async">
     <div class="card-body">
-      <div class="d-flex align-items-center justify-content-between gap-3 mb-3">
+
+      <div class="d-flex justify-content-between mb-3">
         <h2 class="h5 mb-0">Management Shortcuts</h2>
         <span class="badge text-bg-light">Admin</span>
       </div>
+
       <div class="row g-3">
+
         <div class="col-sm-6 col-xl-3">
           <a class="card h-100 text-decoration-none text-body" routerLink="/manage-books">
-            <div class="card-body d-flex align-items-center gap-3">
-              <div>
-                <div class="fw-semibold">Manage Books</div>
-                <div class="text-muted small">Titles and authors</div>
-              </div>
+            <div class="card-body">
+              <div class="fw-semibold">Manage Books</div>
+              <div class="text-muted small">Titles and authors</div>
             </div>
           </a>
         </div>
+
         <div class="col-sm-6 col-xl-3">
           <a class="card h-100 text-decoration-none text-body" routerLink="/manage/authors">
-            <div class="card-body d-flex align-items-center gap-3">
-              <div>
-                <div class="fw-semibold">Authors</div>
-                <div class="text-muted small">Creator records</div>
-              </div>
+            <div class="card-body">
+              <div class="fw-semibold">Authors</div>
+              <div class="text-muted small">Creator records</div>
             </div>
           </a>
         </div>
+
         <div class="col-sm-6 col-xl-3">
           <a class="card h-100 text-decoration-none text-body" routerLink="/manage/categories">
-            <div class="card-body d-flex align-items-center gap-3">
-              <div>
-                <div class="fw-semibold">Categories</div>
-                <div class="text-muted small">Catalog groups</div>
-              </div>
+            <div class="card-body">
+              <div class="fw-semibold">Categories</div>
+              <div class="text-muted small">Catalog groups</div>
             </div>
           </a>
         </div>
+
         <div class="col-sm-6 col-xl-3">
           <a class="card h-100 text-decoration-none text-body" routerLink="/manage/inventories">
-            <div class="card-body d-flex align-items-center gap-3">
-              <div>
-                <div class="fw-semibold">Inventory</div>
-                <div class="text-muted small">Stock copies</div>
-              </div>
+            <div class="card-body">
+              <div class="fw-semibold">Inventory</div>
+              <div class="text-muted small">Stock copies</div>
             </div>
           </a>
         </div>
+
       </div>
+
     </div>
   </div>
+
 </section>

@@ -6,11 +6,9 @@
     </div>
     <div class="d-flex gap-2">
       <button class="btn btn-primary" type="button" *ngIf="canCreate()" (click)="startCreate()">
-
         <span>Add {{ singularTitle() }}</span>
       </button>
       <a class="btn btn-outline-primary" routerLink="/dashboard">
-
         <span>Dashboard</span>
       </a>
     </div>
@@ -20,13 +18,15 @@
   <div class="alert alert-success" *ngIf="message">{{ message }}</div>
 
   <div class="row g-3">
+    <!-- FORM -->
     <div class="col-12" [class.col-xl-4]="showForm" [class.d-none]="!showForm">
       <div class="card">
         <div class="card-body">
           <div class="d-flex align-items-center justify-content-between gap-3 mb-3">
-            <h2 class="h5 mb-0">{{ editingRecord ? 'Edit ' + singularTitle() : 'Add ' + singularTitle() }}</h2>
+            <h2 class="h5 mb-0">
+              {{ editingRecord ? 'Edit ' + singularTitle() : 'Add ' + singularTitle() }}
+            </h2>
             <button class="btn btn-sm btn-outline-secondary" type="button" (click)="hideForm()">
-
               <span>Close</span>
             </button>
           </div>
@@ -34,6 +34,7 @@
           <form class="d-grid gap-3" [formGroup]="form" (ngSubmit)="save()">
             <div *ngFor="let field of visibleFormFields()">
               <ng-container [ngSwitch]="field.type">
+
                 <div class="form-check form-switch" *ngSwitchCase="'checkbox'">
                   <input class="form-check-input" type="checkbox" [id]="field.key" [formControlName]="field.key" />
                   <label class="form-check-label" [for]="field.key">{{ field.label }}</label>
@@ -41,9 +42,7 @@
 
                 <div *ngSwitchCase="'textarea'">
                   <label class="form-label" [for]="field.key">{{ field.label }}</label>
-                  <textarea class="form-control" rows="3" [id]="field.key" [formControlName]="field.key"
-                    [attr.maxlength]="field.maxLength || null"></textarea>
-                  <div class="invalid-feedback d-block" *ngIf="isInvalid(field)">Required value missing.</div>
+                  <textarea class="form-control" rows="3" [id]="field.key" [formControlName]="field.key"></textarea>
                 </div>
 
                 <div *ngSwitchCase="'select'">
@@ -54,21 +53,17 @@
                       {{ optionLabel(option, field) }}
                     </option>
                   </select>
-                  <div class="invalid-feedback d-block" *ngIf="isInvalid(field)">Required value missing.</div>
                 </div>
 
                 <div *ngSwitchDefault>
                   <label class="form-label" [for]="field.key">{{ field.label }}</label>
-                  <input class="form-control" [id]="field.key" [type]="field.type" [formControlName]="field.key"
-                    [attr.min]="field.min ?? null" [attr.max]="field.max ?? null" [attr.step]="field.step ?? null"
-                    [attr.maxlength]="field.maxLength || null" />
-                  <div class="invalid-feedback d-block" *ngIf="isInvalid(field)">Required value missing.</div>
+                  <input class="form-control" [id]="field.key" [type]="field.type" [formControlName]="field.key" />
                 </div>
+
               </ng-container>
             </div>
 
             <button class="btn btn-primary" type="submit" [disabled]="saving || form.invalid">
-
               <span>{{ saving ? 'Saving' : 'Save' }}</span>
             </button>
           </form>
@@ -76,17 +71,15 @@
       </div>
     </div>
 
+    <!-- TABLE -->
     <div class="col-12" [class.col-xl-8]="showForm">
       <div class="card">
         <div class="card-body">
+
           <div class="row g-3 align-items-end mb-3">
             <div class="col-md-7">
-              <label class="form-label" for="crudSearch">Search {{ cfg.title }}</label>
-              <div class="input-group">
-                <span class="input-group-text">Search</span>
-                <input id="crudSearch" class="form-control" type="search" [(ngModel)]="searchTerm"
-                  (ngModelChange)="applyFilter()" />
-              </div>
+              <label class="form-label">Search {{ cfg.title }}</label>
+              <input class="form-control" [(ngModel)]="searchTerm" (ngModelChange)="applyFilter()" />
             </div>
             <div class="col-md-5 text-md-end">
               <span class="badge text-bg-light">{{ filteredRecords.length }} records</span>
@@ -95,6 +88,7 @@
 
           <div class="table-responsive overflow-auto" style="max-height: 400px;"
             *ngIf="filteredRecords.length; else emptyRecords">
+
             <table class="table table-hover align-middle">
               <thead>
                 <tr>
@@ -102,37 +96,64 @@
                   <th class="text-end">Actions</th>
                 </tr>
               </thead>
+
               <tbody>
                 <tr *ngFor="let record of filteredRecords">
+
                   <td *ngFor="let field of tableFields()">
-                    <span *ngIf="field.type === 'checkbox'; else textCell" class="badge"
-                      [class.text-bg-success]="record[field.key]" [class.text-bg-secondary]="!record[field.key]">
-                      {{ record[field.key] ? 'Yes' : 'No' }}
-                    </span>
-                    <ng-template #textCell>
-                      <span class="d-inline-block">{{ formatCell(record, field) }}</span>
+
+                    <!-- ✅ INVENTORY SPECIAL UI -->
+                    <ng-container *ngIf="cfg.key === 'inventories' && field.key === 'isbn'; else normalCell">
+                      <div class="fw-semibold">
+                        {{ getBookTitle(record[field.key] || '') }}
+                      </div>
+
+                      <div class="text-muted small">
+                        ISBN: {{ record[field.key] || '-' }}
+                      </div>
+
+                      <div class="text-muted small">
+                        Copy ID: {{ record['inventoryID'] || '-' }}
+                      </div>
+                    </ng-container>
+
+                    <!-- DEFAULT UI -->
+                    <ng-template #normalCell>
+                      <span *ngIf="field.type === 'checkbox'; else textCell" class="badge"
+                        [class.text-bg-success]="record[field.key]" [class.text-bg-secondary]="!record[field.key]">
+                        {{ record[field.key] ? 'Yes' : 'No' }}
+                      </span>
+
+                      <ng-template #textCell>
+                        <span class="d-inline-block">{{ formatCell(record, field) }}</span>
+                      </ng-template>
                     </ng-template>
+
                   </td>
+
                   <td class="text-end">
                     <div class="btn-group btn-group-sm">
-                      <button class="btn btn-outline-primary" type="button" (click)="startEdit(record)" title="Edit">
+                      <button class="btn btn-outline-primary" type="button" (click)="startEdit(record)">
                         <i class="bi bi-pencil"></i>
                       </button>
                       <button class="btn btn-outline-danger" type="button" *ngIf="canDelete()"
-                        (click)="deleteRecord(record)" title="Delete">
+                        (click)="deleteRecord(record)">
                         <i class="bi bi-trash"></i>
                       </button>
                     </div>
                   </td>
+
                 </tr>
               </tbody>
             </table>
           </div>
 
           <ng-template #emptyRecords>
-            <div class="alert alert-secondary text-center mb-0">{{ loading ? 'Loading records...' : 'No records found.'
-              }}</div>
+            <div class="alert alert-secondary text-center mb-0">
+              {{ loading ? 'Loading records...' : 'No records found.' }}
+            </div>
           </ng-template>
+
         </div>
       </div>
     </div>
@@ -144,7 +165,6 @@
     <div class="alert alert-secondary text-center">
       <div class="h5">Resource not found</div>
       <a class="btn btn-primary mt-2" routerLink="/dashboard">
-
         <span>Dashboard</span>
       </a>
     </div>

@@ -25,6 +25,15 @@ public class BookDto {
     @NotNull(message = "Publisher ID is required")
     @Positive(message = "Publisher ID must be greater than 0")
     private Integer publisherId;
+    
+    private String publisherName;
+    private String categoryName;
+
+    public String getPublisherName() { return publisherName; }
+    public void setPublisherName(String publisherName) { this.publisherName = publisherName; }
+
+    public String getCategoryName() { return categoryName; }
+    public void setCategoryName(String categoryName) { this.categoryName = categoryName; }
 
     public String getIsbn() { return isbn; }
 
