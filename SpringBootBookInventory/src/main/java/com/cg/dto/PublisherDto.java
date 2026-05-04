@@ -16,6 +16,8 @@ public class PublisherDto {
     @NotBlank(message = "State code is required")
     @Size(min = 2, max = 2, message = "State code must be exactly 2 characters")
     private String stateCode;
+    
+    
 
     public Integer getPublisherId() { return publisherId; }
 

@@ -32,6 +32,9 @@ export class CrudPageComponent implements OnInit {
   error = '';
   message = '';
 
+  // ✅ NEW: store books for inventory mapping
+  books: ApiRecord[] = [];
+
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
       this.setupResource(params.get('resource'));
@@ -43,12 +46,15 @@ export class CrudPageComponent implements OnInit {
   }
 
   visibleFormFields(): FieldConfig[] {
-    if (!this.config) {
-      return [];
-    }
-
+    if (!this.config) return [];
     return this.config.fields.filter((field) => this.editingRecord || !field.generated);
   }
+
+  // ✅ FIXED: get book title safely
+getBookTitle(isbn: any): string {
+  const book = this.books?.find((b) => b['isbn'] === isbn);
+  return book && book['title'] ? String(book['title']) : String(isbn ?? '');
+}
 
   canCreate(): boolean {
     return this.config?.key !== 'inventories';
@@ -60,7 +66,11 @@ export class CrudPageComponent implements OnInit {
 
   singularTitle(): string {
     const title = this.config?.title ?? 'Record';
-    return title.endsWith('ies') ? title.slice(0, -3) + 'y' : title.endsWith('s') ? title.slice(0, -1) : title;
+    return title.endsWith('ies')
+      ? title.slice(0, -3) + 'y'
+      : title.endsWith('s')
+      ? title.slice(0, -1)
+      : title;
   }
 
   optionsFor(field: FieldConfig): ApiRecord[] {
@@ -85,16 +95,16 @@ export class CrudPageComponent implements OnInit {
   }
 
   startCreate(clearFeedback = true): void {
-    if (!this.canCreate()) {
-      return;
-    }
+    if (!this.canCreate()) return;
 
     this.editingRecord = null;
     this.showForm = true;
+
     if (clearFeedback) {
       this.message = '';
       this.error = '';
     }
+
     this.form.reset(this.defaultFormValue());
     this.setControlStates(false);
   }
@@ -116,9 +126,7 @@ export class CrudPageComponent implements OnInit {
   }
 
   save(): void {
-    if (!this.config) {
-      return;
-    }
+    if (!this.config) return;
 
     if (this.form.invalid) {
       this.form.markAllAsTouched();
@@ -126,6 +134,7 @@ export class CrudPageComponent implements OnInit {
     }
 
     const payload = this.serializeForm();
+
     const request = this.editingRecord
       ? this.api.update(this.config.endpoint, buildIdPath(this.editingRecord, this.config.idFields), payload)
       : this.api.create(this.config.endpoint, payload);
@@ -149,9 +158,7 @@ export class CrudPageComponent implements OnInit {
   }
 
   deleteRecord(record: ApiRecord): void {
-    if (!this.config || !confirm('Delete this record?')) {
-      return;
-    }
+    if (!this.config || !confirm('Delete this record?')) return;
 
     this.api.delete(this.config.endpoint, buildIdPath(record, this.config.idFields)).subscribe({
       next: () => {
@@ -167,20 +174,26 @@ export class CrudPageComponent implements OnInit {
 
   applyFilter(): void {
     const term = this.searchTerm.trim().toLowerCase();
+
     if (!term) {
       this.filteredRecords = [...this.records];
       return;
     }
 
     this.filteredRecords = this.records.filter((record) =>
-      this.tableFields().some((field) => this.formatCell(record, field).toLowerCase().includes(term))
+      this.tableFields().some((field) =>
+        this.formatCell(record, field).toLowerCase().includes(term)
+      )
     );
   }
 
   formatCell(record: ApiRecord, field: FieldConfig): string {
     const value = record[field.key];
+
     if (field.relation) {
-      const match = this.optionsFor(field).find((option) => this.optionValue(option, field) === value);
+      const match = this.optionsFor(field).find(
+        (option) => this.optionValue(option, field) === value
+      );
       return match ? this.optionLabel(match, field) : String(value ?? '-');
     }
 
@@ -196,9 +209,12 @@ export class CrudPageComponent implements OnInit {
     return Boolean(control?.invalid && (control.dirty || control.touched));
   }
 
+  // ✅ MAIN SETUP
   private setupResource(resourceKey: string | null): void {
     const resource = RESOURCE_CONFIGS.find((item) => item.key === resourceKey) ?? null;
+
     this.config = resource && MANAGED_RESOURCE_KEYS.includes(resource.key) ? resource : null;
+
     this.records = [];
     this.filteredRecords = [];
     this.searchTerm = '';
@@ -215,23 +231,43 @@ export class CrudPageComponent implements OnInit {
     this.hideForm();
     this.loadOptions();
     this.loadRecords();
+
+    // ✅ ONLY load books for inventory
+    if (this.config.key === 'inventories') {
+      this.loadBooks();
+    }
+  }
+
+  // ✅ LOAD BOOKS
+  private loadBooks(): void {
+    this.api.list('/api/books').subscribe({
+      next: (data) => {
+        this.books = data;
+      },
+      error: () => {
+        this.books = [];
+      }
+    });
   }
 
   private buildForm(): void {
     const controls: Record<string, UntypedFormControl> = {};
+
     for (const field of this.config?.fields ?? []) {
-      controls[field.key] = new UntypedFormControl(this.defaultFieldValue(field), this.validatorsFor(field));
+      controls[field.key] = new UntypedFormControl(
+        this.defaultFieldValue(field),
+        this.validatorsFor(field)
+      );
     }
 
     this.form = new UntypedFormGroup(controls);
   }
 
   private loadRecords(): void {
-    if (!this.config) {
-      return;
-    }
+    if (!this.config) return;
 
     this.loading = true;
+
     this.api.list(this.config.endpoint).subscribe({
       next: (records) => {
         this.records = records;
@@ -247,11 +283,10 @@ export class CrudPageComponent implements OnInit {
 
   private loadOptions(): void {
     const fields = this.config?.fields.filter((field) => field.relation) ?? [];
+
     for (const field of fields) {
       const relation = field.relation ? RESOURCE_LOOKUP[field.relation] : null;
-      if (!relation) {
-        continue;
-      }
+      if (!relation) continue;
 
       this.api
         .list(relation.endpoint)
@@ -265,9 +300,7 @@ export class CrudPageComponent implements OnInit {
   private setControlStates(editing: boolean): void {
     for (const field of this.config?.fields ?? []) {
       const control = this.form.get(field.key);
-      if (!control) {
-        continue;
-      }
+      if (!control) continue;
 
       if (field.generated || (editing && field.readonlyOnEdit)) {
         control.disable({ emitEvent: false });
@@ -279,29 +312,27 @@ export class CrudPageComponent implements OnInit {
 
   private defaultFormValue(): ApiRecord {
     const value: ApiRecord = {};
+
     for (const field of this.config?.fields ?? []) {
       value[field.key] = this.defaultFieldValue(field);
     }
+
     return value;
   }
 
   private recordFormValue(record: ApiRecord): ApiRecord {
     const value: ApiRecord = {};
+
     for (const field of this.config?.fields ?? []) {
       value[field.key] = record[field.key] ?? this.defaultFieldValue(field);
     }
+
     return value;
   }
 
   private defaultFieldValue(field: FieldConfig): Primitive {
-    if (field.type === 'checkbox') {
-      return false;
-    }
-
-    if (field.type === 'number' || field.type === 'select') {
-      return null;
-    }
-
+    if (field.type === 'checkbox') return false;
+    if (field.type === 'number' || field.type === 'select') return null;
     return '';
   }
 
@@ -310,17 +341,20 @@ export class CrudPageComponent implements OnInit {
     const payload: ApiRecord = {};
 
     for (const field of this.config?.fields ?? []) {
-      if (!this.editingRecord && field.generated) {
-        continue;
-      }
+      if (!this.editingRecord && field.generated) continue;
 
       const rawValue = raw[field.key];
+
       if (field.type === 'checkbox') {
         payload[field.key] = Boolean(rawValue);
       } else if (field.type === 'number') {
-        payload[field.key] = rawValue === '' || rawValue === null || rawValue === undefined ? null : Number(rawValue);
+        payload[field.key] =
+          rawValue === '' || rawValue === null || rawValue === undefined
+            ? null
+            : Number(rawValue);
       } else {
-        payload[field.key] = rawValue === '' || rawValue === undefined ? null : (rawValue as Primitive);
+        payload[field.key] =
+          rawValue === '' || rawValue === undefined ? null : (rawValue as Primitive);
       }
     }
 
@@ -329,21 +363,11 @@ export class CrudPageComponent implements OnInit {
 
   private validatorsFor(field: FieldConfig): ValidatorFn[] {
     const validators: ValidatorFn[] = [];
-    if (field.required) {
-      validators.push(Validators.required);
-    }
 
-    if (field.min !== undefined) {
-      validators.push(Validators.min(field.min));
-    }
-
-    if (field.max !== undefined) {
-      validators.push(Validators.max(field.max));
-    }
-
-    if (field.maxLength !== undefined) {
-      validators.push(Validators.maxLength(field.maxLength));
-    }
+    if (field.required) validators.push(Validators.required);
+    if (field.min !== undefined) validators.push(Validators.min(field.min));
+    if (field.max !== undefined) validators.push(Validators.max(field.max));
+    if (field.maxLength !== undefined) validators.push(Validators.maxLength(field.maxLength));
 
     return validators;
   }
