@@ -57,7 +57,6 @@ export const RESOURCE_CONFIGS: ResourceConfig[] = [
     idFields: ['publisherId'],
     labelFields: ['name', 'publisherId'],
     fields: [
-      { key: 'publisherId', label: 'Publisher ID', type: 'number', required: true, readonlyOnEdit: true },
       { key: 'name', label: 'Name', type: 'text', required: true, maxLength: 50 },
       { key: 'city', label: 'City', type: 'text', maxLength: 30 },
       { key: 'stateCode', label: 'State', type: 'select', relation: 'states', optionValue: 'stateCode' }
