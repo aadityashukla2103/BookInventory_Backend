@@ -41,7 +41,8 @@
 
                 <div *ngSwitchCase="'textarea'">
                   <label class="form-label" [for]="field.key">{{ field.label }}</label>
-                  <textarea class="form-control" rows="3" [id]="field.key" [formControlName]="field.key" [attr.maxlength]="field.maxLength || null"></textarea>
+                  <textarea class="form-control" rows="3" [id]="field.key" [formControlName]="field.key"
+                    [attr.maxlength]="field.maxLength || null"></textarea>
                   <div class="invalid-feedback d-block" *ngIf="isInvalid(field)">Required value missing.</div>
                 </div>
 
@@ -58,16 +59,9 @@
 
                 <div *ngSwitchDefault>
                   <label class="form-label" [for]="field.key">{{ field.label }}</label>
-                  <input
-                    class="form-control"
-                    [id]="field.key"
-                    [type]="field.type"
-                    [formControlName]="field.key"
-                    [attr.min]="field.min ?? null"
-                    [attr.max]="field.max ?? null"
-                    [attr.step]="field.step ?? null"
-                    [attr.maxlength]="field.maxLength || null"
-                  />
+                  <input class="form-control" [id]="field.key" [type]="field.type" [formControlName]="field.key"
+                    [attr.min]="field.min ?? null" [attr.max]="field.max ?? null" [attr.step]="field.step ?? null"
+                    [attr.maxlength]="field.maxLength || null" />
                   <div class="invalid-feedback d-block" *ngIf="isInvalid(field)">Required value missing.</div>
                 </div>
               </ng-container>
@@ -90,7 +84,8 @@
               <label class="form-label" for="crudSearch">Search {{ cfg.title }}</label>
               <div class="input-group">
                 <span class="input-group-text">Search</span>
-                <input id="crudSearch" class="form-control" type="search" [(ngModel)]="searchTerm" (ngModelChange)="applyFilter()" />
+                <input id="crudSearch" class="form-control" type="search" [(ngModel)]="searchTerm"
+                  (ngModelChange)="applyFilter()" />
               </div>
             </div>
             <div class="col-md-5 text-md-end">
@@ -98,7 +93,8 @@
             </div>
           </div>
 
-          <div class="table-responsive" *ngIf="filteredRecords.length; else emptyRecords">
+          <div class="table-responsive overflow-auto" style="max-height: 400px;"
+            *ngIf="filteredRecords.length; else emptyRecords">
             <table class="table table-hover align-middle">
               <thead>
                 <tr>
@@ -109,7 +105,8 @@
               <tbody>
                 <tr *ngFor="let record of filteredRecords">
                   <td *ngFor="let field of tableFields()">
-                    <span *ngIf="field.type === 'checkbox'; else textCell" class="badge" [class.text-bg-success]="record[field.key]" [class.text-bg-secondary]="!record[field.key]">
+                    <span *ngIf="field.type === 'checkbox'; else textCell" class="badge"
+                      [class.text-bg-success]="record[field.key]" [class.text-bg-secondary]="!record[field.key]">
                       {{ record[field.key] ? 'Yes' : 'No' }}
                     </span>
                     <ng-template #textCell>
@@ -119,10 +116,11 @@
                   <td class="text-end">
                     <div class="btn-group btn-group-sm">
                       <button class="btn btn-outline-primary" type="button" (click)="startEdit(record)" title="Edit">
-
+                        <i class="bi bi-pencil"></i>
                       </button>
-                      <button class="btn btn-outline-danger" type="button" *ngIf="canDelete()" (click)="deleteRecord(record)" title="Delete">
-
+                      <button class="btn btn-outline-danger" type="button" *ngIf="canDelete()"
+                        (click)="deleteRecord(record)" title="Delete">
+                        <i class="bi bi-trash"></i>
                       </button>
                     </div>
                   </td>
@@ -132,7 +130,8 @@
           </div>
 
           <ng-template #emptyRecords>
-            <div class="alert alert-secondary text-center mb-0">{{ loading ? 'Loading records...' : 'No records found.' }}</div>
+            <div class="alert alert-secondary text-center mb-0">{{ loading ? 'Loading records...' : 'No records found.'
+              }}</div>
           </ng-template>
         </div>
       </div>

@@ -1,7 +1,5 @@
 <section class="container-fluid px-0">
-  <div
-    class="d-flex flex-wrap align-items-end justify-content-between gap-3 mb-4"
-  >
+  <div class="d-flex flex-wrap align-items-end justify-content-between gap-3 mb-4">
     <div>
       <h1 class="display-6 fw-bold mb-1">Manage Books</h1>
       <p class="text-muted mb-0">
@@ -9,11 +7,8 @@
         stock.
       </p>
     </div>
-    <a
-      class="btn btn-primary"
-      routerLink="/manage-books/new"
-      *ngIf="isAdmin$ | async"
-    >
+    <a class="btn btn-primary" routerLink="/manage-books/new" *ngIf="isAdmin$ | async">
+      <i class="bi bi-plus-lg me-1"></i>
 
       <span>Add Book</span>
     </a>
@@ -26,24 +21,13 @@
           <label class="form-label" for="bookSearch">Search</label>
           <div class="input-group">
             <span class="input-group-text">Search</span>
-            <input
-              id="bookSearch"
-              class="form-control"
-              type="search"
-              [(ngModel)]="searchTerm"
-              (ngModelChange)="applyFilters()"
-              placeholder="Title, ISBN, category, publisher"
-            />
+            <input id="bookSearch" class="form-control" type="search" [(ngModel)]="searchTerm"
+              (ngModelChange)="applyFilters()" placeholder="Title, ISBN, category, publisher" />
           </div>
         </div>
         <div class="col-lg-4">
           <label class="form-label" for="bookCategory">Category</label>
-          <select
-            id="bookCategory"
-            class="form-select"
-            [(ngModel)]="categoryFilter"
-            (ngModelChange)="applyFilters()"
-          >
+          <select id="bookCategory" class="form-select" [(ngModel)]="categoryFilter" (ngModelChange)="applyFilters()">
             <option value="">All categories</option>
             <option *ngFor="let category of categories" [value]="category.catId">
               {{ category.categoryName }}
@@ -51,11 +35,7 @@
           </select>
         </div>
         <div class="col-lg-2 d-grid">
-          <button
-            class="btn btn-outline-secondary"
-            type="button"
-            (click)="clearFilters()"
-          >
+          <button class="btn btn-outline-secondary" type="button" (click)="clearFilters()">
 
             <span>Clear</span>
           </button>
@@ -91,27 +71,18 @@
               <td>{{ book.edition || '-' }}</td>
               <td class="text-end">
                 <div class="btn-group btn-group-sm">
-                  <a
-                    class="btn btn-outline-primary"
-                    [routerLink]="['/books', book.isbn]"
-                    title="View details"
-                  >
+                  <a class="btn btn-outline-primary" [routerLink]="['/books', book.isbn]" title="View details">
+                    <i class="bi bi-eye"></i>
 
                   </a>
                   <ng-container *ngIf="isAdmin$ | async">
-                    <a
-                      class="btn btn-outline-secondary"
-                      [routerLink]="['/manage-books', book.isbn, 'edit']"
-                      title="Edit"
-                    >
+                    <a class="btn btn-outline-secondary" [routerLink]="['/manage-books', book.isbn, 'edit']"
+                      title="Edit">
+                      <i class="bi bi-pencil"></i>
 
                     </a>
-                    <button
-                      class="btn btn-outline-danger"
-                      type="button"
-                      (click)="deleteBook(book)"
-                      title="Delete"
-                    >
+                    <button class="btn btn-outline-danger" type="button" (click)="deleteBook(book)" title="Delete">
+                      <i class="bi bi-trash"></i>
 
                     </button>
                   </ng-container>
