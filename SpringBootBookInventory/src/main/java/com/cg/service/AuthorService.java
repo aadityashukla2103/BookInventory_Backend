@@ -35,7 +35,6 @@ public class AuthorService {
         }
 
         Author entity = new Author();
-        entity.setAuthorID(dto.getAuthorID());
         entity.setLastName(dto.getLastName());
         entity.setFirstName(dto.getFirstName());
         entity.setPhoto(dto.getPhoto());

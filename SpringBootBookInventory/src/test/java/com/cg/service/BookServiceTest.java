@@ -4,7 +4,9 @@ import com.cg.dto.BookDto;
 import com.cg.entity.Book;
 import com.cg.entity.Publisher;
 import com.cg.repo.BookRepository;
+import com.cg.repo.BookConditionRepository;
 import com.cg.repo.CategoryRepository;
+import com.cg.repo.InventoryRepository;
 import com.cg.repo.PublisherRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -20,13 +22,15 @@ public class BookServiceTest {
         BookRepository repo = Mockito.mock(BookRepository.class);
         CategoryRepository catRepo = Mockito.mock(CategoryRepository.class);
         PublisherRepository pubRepo = Mockito.mock(PublisherRepository.class);
+        InventoryRepository inventoryRepo = Mockito.mock(InventoryRepository.class);
+        BookConditionRepository conditionRepo = Mockito.mock(BookConditionRepository.class);
 
         Book book = new Book();
         book.setIsbn("101");
 
         Mockito.when(repo.findById("101")).thenReturn(Optional.of(book));
 
-        BookService service = new BookService(repo, catRepo, pubRepo);
+        BookService service = new BookService(repo, catRepo, pubRepo, inventoryRepo, conditionRepo);
 
         BookDto result = service.getById("101");
 
@@ -38,13 +42,15 @@ public class BookServiceTest {
         BookRepository repo = Mockito.mock(BookRepository.class);
         CategoryRepository catRepo = Mockito.mock(CategoryRepository.class);
         PublisherRepository pubRepo = Mockito.mock(PublisherRepository.class);
+        InventoryRepository inventoryRepo = Mockito.mock(InventoryRepository.class);
+        BookConditionRepository conditionRepo = Mockito.mock(BookConditionRepository.class);
 
         Book book = new Book();
         book.setIsbn("101");
 
         Mockito.when(repo.findById("101")).thenReturn(Optional.of(book));
 
-        BookService service = new BookService(repo, catRepo, pubRepo);
+        BookService service = new BookService(repo, catRepo, pubRepo, inventoryRepo, conditionRepo);
 
         service.delete("101");
 

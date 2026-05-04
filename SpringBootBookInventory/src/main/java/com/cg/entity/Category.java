@@ -8,6 +8,7 @@ import java.util.List;
 public class Category {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "CatID")
 	private Integer catId;
 

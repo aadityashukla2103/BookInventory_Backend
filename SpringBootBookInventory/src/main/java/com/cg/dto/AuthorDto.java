@@ -1,12 +1,10 @@
 package com.cg.dto;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public class AuthorDto {
 
-    @NotNull(message = "Author ID is required")
     private Integer authorID;
 
     @NotBlank(message = "Last name is required")
