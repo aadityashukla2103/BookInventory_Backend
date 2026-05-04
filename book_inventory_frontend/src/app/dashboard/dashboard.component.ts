@@ -3,8 +3,8 @@ import { Component, OnInit, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Observable, catchError, forkJoin, map, of } from 'rxjs';
 
-import { ApiService } from '../../core/api.service';
-import { AuthService } from '../../core/auth.service';
+import { ApiService } from '../services/api.service';
+import { AuthService } from '../services/auth.service';
 import {
   ApiRecord,
   BookConditionDto,
@@ -12,7 +12,7 @@ import {
   InventoryDto,
   ShoppingCartDto,
   UserDto
-} from '../../data/models';
+} from '../models';
 
 interface DashboardStat {
   label: string;
@@ -25,8 +25,7 @@ interface DashboardStat {
   selector: 'app-dashboard',
   standalone: true,
   imports: [AsyncPipe, CurrencyPipe, NgFor, NgIf, RouterLink],
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css']
+  templateUrl: './dashboard.component.html'
 })
 export class DashboardComponent implements OnInit {
   private readonly api = inject(ApiService);
@@ -56,15 +55,10 @@ export class DashboardComponent implements OnInit {
         this.recentBooks = [...books].slice(-6).reverse();
         this.totalCopies = inventories.length;
         this.availableCopies = inventories.filter((copy) => !copy.purchased).length;
-        this.availabilityPercent = this.totalCopies
-          ? Math.round((this.availableCopies / this.totalCopies) * 100)
-          : 0;
-
+        this.availabilityPercent = this.totalCopies ? Math.round((this.availableCopies / this.totalCopies) * 100) : 0;
         this.estimatedAvailableValue = inventories
           .filter((copy) => !copy.purchased)
-          .reduce((total, copy) =>
-            total + (conditions.find((c) => c.ranks === copy.ranks)?.price ?? 0), 0);
-
+          .reduce((total, copy) => total + (conditions.find((condition) => condition.ranks === copy.ranks)?.price ?? 0), 0);
         this.stats = [
           { label: 'Books', value: books.length, icon: 'bi-book', tone: 'tone-primary' },
           { label: 'Users', value: users.length, icon: 'bi-people', tone: 'tone-coral' },
