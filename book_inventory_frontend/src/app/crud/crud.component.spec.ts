@@ -1,18 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CrudComponent } from './crud.component';
+import { appTestProviders } from '../testing/app-test-providers';
+import { CrudPageComponent } from './crud.component';
 
-describe('CrudComponent', () => {
-  let component: CrudComponent;
-  let fixture: ComponentFixture<CrudComponent>;
+describe('CrudPageComponent', () => {
+  let component: CrudPageComponent;
+  let fixture: ComponentFixture<CrudPageComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CrudComponent]
+      imports: [CrudPageComponent],
+      providers: appTestProviders
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(CrudComponent);
+    fixture = TestBed.createComponent(CrudPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
