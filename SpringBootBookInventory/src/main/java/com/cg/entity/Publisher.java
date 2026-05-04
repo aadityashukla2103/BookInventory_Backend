@@ -7,6 +7,7 @@ import java.util.List;
 @Table(name = "publisher")
 public class Publisher {
 	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY) 
 	@Column(name = "PublisherID")
 	private Integer publisherId;
 

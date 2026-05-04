@@ -4,8 +4,6 @@ import jakarta.validation.constraints.*;
 
 public class PublisherDto {
 
-    @NotNull(message = "Publisher ID is required")
-    @Positive(message = "Publisher ID must be greater than 0")
     private Integer publisherId;
 
     @NotBlank(message = "Name is required")

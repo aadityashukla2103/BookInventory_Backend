@@ -17,6 +17,7 @@ import {
   PublisherDto,
   ShoppingCartDto
 } from '../models';
+import { BookCardComponent } from '../book-card/book-card.component';
 
 interface CatalogBook {
   isbn: string;
@@ -35,7 +36,7 @@ interface CatalogBook {
 @Component({
   selector: 'app-catalog',
   standalone: true,
-  imports: [CurrencyPipe, FormsModule, NgFor, NgIf, RouterLink],
+  imports: [CurrencyPipe, FormsModule, NgFor, NgIf, RouterLink,BookCardComponent],
   templateUrl: './catalog.component.html'
 })
 export class CatalogComponent implements OnInit {
