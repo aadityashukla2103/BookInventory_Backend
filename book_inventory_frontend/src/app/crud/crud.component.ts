@@ -12,7 +12,7 @@ import { MANAGED_RESOURCE_KEYS, RESOURCE_CONFIGS, RESOURCE_LOOKUP } from '../res
   selector: 'app-crud-page',
   standalone: true,
   imports: [FormsModule, NgFor, NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault, ReactiveFormsModule, RouterLink],
-  templateUrl: './crud-page.component.html'
+  templateUrl: './crud.component.html'
 })
 export class CrudPageComponent implements OnInit {
   private readonly api = inject(ApiService);
