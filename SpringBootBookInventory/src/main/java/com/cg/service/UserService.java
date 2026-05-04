@@ -4,29 +4,32 @@ import com.cg.dto.UserRequestDto;
 import com.cg.dto.UserResponseDto;
 import com.cg.entity.PermRole;
 import com.cg.entity.User;
+import com.cg.exception.DuplicateResourceException;
 import com.cg.exception.ResourceNotFoundException;
 import com.cg.repo.PermRoleRepository;
 import com.cg.repo.UserRepository;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class UserService {
 
+    private static final Integer DEFAULT_ROLE_NUMBER = 2;
+
     private final UserRepository userRepository;
     private final PermRoleRepository permRoleRepository;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     public UserService(UserRepository userRepository,
-                       PermRoleRepository permRoleRepository) {
+                       PermRoleRepository permRoleRepository,
+                       PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.permRoleRepository = permRoleRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<UserResponseDto> getAll() {
@@ -49,8 +52,10 @@ public class UserService {
             throw new IllegalArgumentException("User data cannot be null");
         }
 
+        validateUniqueUserName(dto.getUserName(), null);
+
         User user = new User();
-        apply(dto, user);
+        apply(dto, user, DEFAULT_ROLE_NUMBER);
 
         return toDto(userRepository.save(user));
     }
@@ -61,7 +66,8 @@ public class UserService {
         }
 
         User user = findEntity(id);
-        apply(dto, user);
+        validateUniqueUserName(dto.getUserName(), id);
+        apply(dto, user, dto.getRoleNumber());
 
         return toDto(userRepository.save(user));
     }
@@ -80,28 +86,49 @@ public class UserService {
                         new ResourceNotFoundException("User not found with id: " + id));
     }
 
-    private void apply(UserRequestDto dto, User user) {
+    private void validateUniqueUserName(String userName, Integer currentUserId) {
+        String normalizedUserName = normalize(userName);
+        if (normalizedUserName == null) {
+            return;
+        }
 
-        user.setLastName(dto.getLastName());
-        user.setFirstName(dto.getFirstName());
-        user.setPhoneNumber(dto.getPhoneNumber());
-        user.setUserName(dto.getUserName());
+        userRepository.findByUserName(normalizedUserName)
+                .filter(existing -> !Objects.equals(existing.getUserID(), currentUserId))
+                .ifPresent(existing -> {
+                    throw new DuplicateResourceException("Username already exists: " + normalizedUserName);
+                });
+    }
+
+    private void apply(UserRequestDto dto, User user, Integer fallbackRoleNumber) {
+
+        user.setLastName(normalize(dto.getLastName()));
+        user.setFirstName(normalize(dto.getFirstName()));
+        user.setPhoneNumber(normalize(dto.getPhoneNumber()));
+        user.setUserName(normalize(dto.getUserName()));
 
         if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
             user.setPassword(passwordEncoder.encode(dto.getPassword()));
         }
 
-        if (dto.getRoleNumber() != null) {
-            PermRole role = permRoleRepository.findById(dto.getRoleNumber())
+        Integer roleNumber = dto.getRoleNumber() != null ? dto.getRoleNumber() : fallbackRoleNumber;
+        if (roleNumber != null) {
+            PermRole role = permRoleRepository.findById(roleNumber)
                     .orElseThrow(() ->
                             new ResourceNotFoundException(
-                                    "Role not found with id: " + dto.getRoleNumber()
+                                    "Role not found with id: " + roleNumber
                             ));
 
             user.setRole(role);
-        } else {
-            user.setRole(null);
         }
+    }
+
+    private String normalize(String value) {
+        if (value == null) {
+            return null;
+        }
+
+        String trimmed = value.trim();
+        return trimmed.isEmpty() ? null : trimmed;
     }
 
     private UserResponseDto toDto(User user) {

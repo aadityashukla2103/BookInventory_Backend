@@ -41,7 +41,6 @@ public class CategoryService {
         }
 
         Category entity = new Category();
-        entity.setCatId(dto.getCatId());
         entity.setCategoryName(dto.getCategoryName());
 
         return toDto(categoryRepository.save(entity));

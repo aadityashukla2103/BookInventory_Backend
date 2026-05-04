@@ -92,7 +92,11 @@ class AuthorServiceTest {
 		request.setLastName("Martin");
 		request.setPhoto("img");
 
-		when(authorRepository.save(any(Author.class))).thenAnswer(invocation -> invocation.getArgument(0));
+		when(authorRepository.save(any(Author.class))).thenAnswer(invocation -> {
+			Author saved = invocation.getArgument(0);
+			saved.setAuthorID(1);
+			return saved;
+		});
 
 		AuthorDto result = authorService.create(request);
 

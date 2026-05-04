@@ -4,8 +4,6 @@ import jakarta.validation.constraints.*;
 
 public class CategoryDto {
 
-    @NotNull(message = "Category ID is required")
-    @Positive(message = "Category ID must be greater than 0")
     private Integer catId;
 
     @NotBlank(message = "Category name is required")

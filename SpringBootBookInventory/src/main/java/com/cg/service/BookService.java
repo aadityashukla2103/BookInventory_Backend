@@ -2,12 +2,16 @@ package com.cg.service;
 
 import com.cg.dto.BookDto;
 import com.cg.entity.Book;
+import com.cg.entity.BookCondition;
 import com.cg.entity.Category;
+import com.cg.entity.Inventory;
 import com.cg.entity.Publisher;
 import com.cg.exception.BadRequestException;
 import com.cg.exception.ResourceNotFoundException;
+import com.cg.repo.BookConditionRepository;
 import com.cg.repo.BookRepository;
 import com.cg.repo.CategoryRepository;
+import com.cg.repo.InventoryRepository;
 import com.cg.repo.PublisherRepository;
 import org.springframework.stereotype.Service;
 
@@ -19,13 +23,19 @@ public class BookService {
     private final BookRepository bookRepository;
     private final CategoryRepository categoryRepository;
     private final PublisherRepository publisherRepository;
+    private final InventoryRepository inventoryRepository;
+    private final BookConditionRepository bookConditionRepository;
 
     public BookService(BookRepository bookRepository,
                        CategoryRepository categoryRepository,
-                       PublisherRepository publisherRepository) {
+                       PublisherRepository publisherRepository,
+                       InventoryRepository inventoryRepository,
+                       BookConditionRepository bookConditionRepository) {
         this.bookRepository = bookRepository;
         this.categoryRepository = categoryRepository;
         this.publisherRepository = publisherRepository;
+        this.inventoryRepository = inventoryRepository;
+        this.bookConditionRepository = bookConditionRepository;
     }
 
     public List<BookDto> getAll() {
@@ -48,7 +58,9 @@ public class BookService {
         entity.setIsbn(dto.getIsbn());
         apply(dto, entity);
 
-        return toDto(bookRepository.save(entity));
+        Book saved = bookRepository.save(entity);
+        createInitialInventory(saved);
+        return toDto(saved);
     }
 
     public BookDto update(String isbn, BookDto dto) {
@@ -91,6 +103,19 @@ public class BookService {
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Publisher not found with id: " + dto.getPublisherId()));
         entity.setPublisher(publisher);
+    }
+
+    private void createInitialInventory(Book book) {
+        BookCondition condition = bookConditionRepository.findAll()
+                .stream()
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("Book condition is required before creating inventory"));
+
+        Inventory inventory = new Inventory();
+        inventory.setBook(book);
+        inventory.setBookCondition(condition);
+        inventory.setPurchased(false);
+        inventoryRepository.save(inventory);
     }
 
     private BookDto toDto(Book entity) {
