@@ -10,14 +10,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 public class MyConfig {
 
+    // ✅ Password Encoder Bean (recommended strength explicitly set)
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        return new BCryptPasswordEncoder(10); // strength = 10 (default but explicit is better)
     }
 
+    // ✅ Authentication Manager Bean (Spring Boot 3 standard way)
     @Bean
-    public AuthenticationManager authenticationManager(
-            AuthenticationConfiguration config) throws Exception {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
 }
