@@ -14,13 +14,14 @@ import org.springframework.context.annotation.Configuration;
         version = "1.0",
         description = "JWT Secured APIs"
     ),
-    security = @SecurityRequirement(name = "bearerAuth")
+    security = @SecurityRequirement(name = "bearerAuth") // ✅ global security
 )
 @SecurityScheme(
     name = "bearerAuth",
     type = SecuritySchemeType.HTTP,
     scheme = "bearer",
-    bearerFormat = "JWT"
+    bearerFormat = "JWT",
+    description = "Enter JWT token in format: Bearer <token>" // ✅ helpful for Swagger UI
 )
 public class OpenApiConfig {
 }
