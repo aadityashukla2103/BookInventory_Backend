@@ -120,12 +120,30 @@ public class BookService {
 
     private BookDto toDto(Book entity) {
         BookDto dto = new BookDto();
+
         dto.setIsbn(entity.getIsbn());
         dto.setTitle(entity.getTitle());
         dto.setDescription(entity.getDescription());
         dto.setEdition(entity.getEdition());
-        dto.setCategoryId(entity.getCategory() != null ? entity.getCategory().getCatId() : null);
-        dto.setPublisherId(entity.getPublisher() != null ? entity.getPublisher().getPublisherId() : null);
+
+        // IDs (keep these)
+        dto.setCategoryId(
+            entity.getCategory() != null ? entity.getCategory().getCatId() : null
+        );
+
+        dto.setPublisherId(
+            entity.getPublisher() != null ? entity.getPublisher().getPublisherId() : null
+        );
+
+        // ✅ ADD THESE (IMPORTANT)
+        dto.setCategoryName(
+            entity.getCategory() != null ? entity.getCategory().getCategoryName() : null
+        );
+
+        dto.setPublisherName(
+            entity.getPublisher() != null ? entity.getPublisher().getName() : null
+        );
+
         return dto;
     }
 }

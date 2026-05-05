@@ -1,4 +1,4 @@
-import { AsyncPipe, CurrencyPipe, NgFor, NgIf } from '@angular/common';
+import { AsyncPipe, CurrencyPipe, NgFor, NgIf ,NgClass} from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Observable, catchError, forkJoin, map, of } from 'rxjs';
@@ -24,7 +24,7 @@ interface DashboardStat {
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [AsyncPipe, CurrencyPipe, NgFor, NgIf, RouterLink],
+  imports: [AsyncPipe, CurrencyPipe, NgFor, NgIf,NgClass, RouterLink],
   templateUrl: './dashboard.component.html'
 })
 export class DashboardComponent implements OnInit {
@@ -61,8 +61,8 @@ export class DashboardComponent implements OnInit {
           .reduce((total, copy) => total + (conditions.find((condition) => condition.ranks === copy.ranks)?.price ?? 0), 0);
         this.stats = [
           { label: 'Books', value: books.length, icon: 'bi-book', tone: 'tone-primary' },
-          { label: 'Users', value: users.length, icon: 'bi-people', tone: 'tone-coral' },
-          { label: 'Cart Rows', value: carts.length, icon: 'bi-cart', tone: 'tone-gold' },
+          { label: 'Customers', value: users.length, icon: 'bi-people', tone: 'tone-coral' },
+          // { label: 'Cart Rows', value: carts.length, icon: 'bi-cart', tone: 'tone-gold' },
           { label: 'Available Copies', value: this.availableCopies, icon: 'bi-box-seam', tone: 'tone-neutral' }
         ];
       },

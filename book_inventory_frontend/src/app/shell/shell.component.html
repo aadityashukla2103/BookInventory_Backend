@@ -59,18 +59,51 @@
 
     <main class="col p-0">
       <header
-        class="d-flex align-items-center justify-content-between gap-3 border-bottom bg-white p-3"
+        class="d-flex align-items-center justify-content-between gap-3 border-bottom bg-white px-3 py-2 shadow-sm"
       >
-        <div *ngIf="authState$ | async as auth">
-          <div class="fw-semibold">{{ auth.username || "Signed in" }}</div>
-          <div class="text-muted small">
-            {{
-              auth.roles.length ? auth.roles.join(", ") : "Authenticated user"
-            }}
+        <!-- LEFT SIDE (USER INFO) -->
+        <div
+          class="d-flex align-items-center gap-3"
+          *ngIf="authState$ | async as auth"
+        >
+          <!-- AVATAR -->
+          <div
+            class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center"
+            style="width: 40px; height: 40px; font-weight: 600"
+          >
+            {{ auth.username ? auth.username.charAt(0).toUpperCase() : "U" }}
+          </div>
+
+          <!-- USER INFO -->
+          <div>
+            <div class="fw-semibold">
+              {{ auth.username || "Signed in" }}
+            </div>
+
+            <!-- ROLES AS BADGES -->
+            <div class="d-flex gap-1 flex-wrap mt-1">
+              <span
+                *ngFor="let role of auth.roles"
+                class="badge rounded-pill"
+                [ngClass]="
+                  role.toUpperCase().includes('ADMIN')
+                    ? 'bg-danger-subtle text-danger'
+                    : 'bg-secondary-subtle text-secondary'
+                "
+              >
+                {{ role }}
+              </span>
+            </div>
           </div>
         </div>
-        <button class="btn btn-outline-danger" type="button" (click)="logout()">
-          <span>Logout</span>
+
+        <!-- RIGHT SIDE (LOGOUT) -->
+        <button
+          class="btn btn-outline-danger btn-sm px-3"
+          type="button"
+          (click)="logout()"
+        >
+          Logout
         </button>
       </header>
 

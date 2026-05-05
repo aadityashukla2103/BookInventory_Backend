@@ -1,4 +1,4 @@
-import { AsyncPipe, NgFor, NgIf } from '@angular/common';
+import { AsyncPipe, NgFor, NgIf,NgClass } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { map } from 'rxjs';
@@ -10,7 +10,7 @@ import { MANAGED_RESOURCE_KEYS, RESOURCE_CONFIGS } from '../resource-config';
 @Component({
   selector: 'app-shell',
   standalone: true,
-  imports: [AsyncPipe, NgFor, NgIf, RouterLink, RouterLinkActive, RouterOutlet],
+  imports: [AsyncPipe, NgFor, NgIf, RouterLink, RouterLinkActive, RouterOutlet,NgClass],
   templateUrl: './shell.component.html'
 })
 export class ShellComponent {

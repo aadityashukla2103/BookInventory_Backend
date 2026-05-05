@@ -27,9 +27,6 @@ public class InventoryService {
         this.bookConditionRepository = bookConditionRepository;
     }
 
-    // ==========================
-    // GET ALL
-    // ==========================
     public List<InventoryDto> getAll() {
         return inventoryRepository.findAll()
                 .stream()

@@ -13,4 +13,6 @@ public interface InventoryRepository extends JpaRepository<Inventory, Integer> {
     List<Inventory> findByBook_Isbn(String isbn);
 
     List<Inventory> findByPurchasedFalse();
+    List<Inventory> findByPurchasedTrueOrderByInventoryIDDesc();
+
 }

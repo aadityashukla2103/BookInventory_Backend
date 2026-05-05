@@ -1,12 +1,22 @@
-<section class="page-shell container-fluid px-0" *ngIf="config as cfg; else unknownResource">
-  <div class="page-heading d-flex flex-wrap align-items-end justify-content-between gap-3">
+<section
+  class="page-shell container-fluid px-0"
+  *ngIf="config as cfg; else unknownResource"
+>
+  <div
+    class="page-heading d-flex flex-wrap align-items-end justify-content-between gap-3"
+  >
     <div>
       <div class="auth-kicker mb-2">Management Table</div>
       <h1 class="display-6 fw-bold mb-1">{{ cfg.title }}</h1>
       <p class="text-muted mb-0">{{ cfg.description }}</p>
     </div>
     <div class="d-flex gap-2">
-      <button class="btn btn-primary" type="button" *ngIf="canCreate()" (click)="startCreate()">
+      <button
+        class="btn btn-primary"
+        type="button"
+        *ngIf="canCreate()"
+        (click)="startCreate()"
+      >
         <span>Add {{ singularTitle() }}</span>
       </button>
       <a class="btn btn-outline-primary" routerLink="/dashboard">
@@ -19,12 +29,25 @@
   <div class="alert alert-success" *ngIf="message">{{ message }}</div>
 
   <div class="row g-3">
+    <!-- FORM -->
     <div class="col-12" [class.col-xl-4]="showForm" [class.d-none]="!showForm">
       <div class="data-card card">
         <div class="card-body">
-          <div class="d-flex align-items-center justify-content-between gap-3 mb-3">
-            <h2 class="h5 mb-0">{{ editingRecord ? 'Edit ' + singularTitle() : 'Add ' + singularTitle() }}</h2>
-            <button class="btn btn-sm btn-outline-secondary" type="button" (click)="hideForm()">
+          <div
+            class="d-flex align-items-center justify-content-between gap-3 mb-3"
+          >
+            <h2 class="h5 mb-0">
+              {{
+                editingRecord
+                  ? "Edit " + singularTitle()
+                  : "Add " + singularTitle()
+              }}
+            </h2>
+            <button
+              class="btn btn-sm btn-outline-secondary"
+              type="button"
+              (click)="hideForm()"
+            >
               <span>Close</span>
             </button>
           </div>
@@ -33,29 +56,59 @@
             <div *ngFor="let field of visibleFormFields()">
               <ng-container [ngSwitch]="field.type">
                 <div class="form-check form-switch" *ngSwitchCase="'checkbox'">
-                  <input class="form-check-input" type="checkbox" [id]="field.key" [formControlName]="field.key" />
-                  <label class="form-check-label" [for]="field.key">{{ field.label }}</label>
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    [id]="field.key"
+                    [formControlName]="field.key"
+                  />
+                  <label class="form-check-label" [for]="field.key">{{
+                    field.label
+                  }}</label>
                 </div>
 
                 <div *ngSwitchCase="'textarea'">
-                  <label class="form-label" [for]="field.key">{{ field.label }}</label>
-                  <textarea class="form-control" rows="3" [id]="field.key" [formControlName]="field.key" [attr.maxlength]="field.maxLength || null"></textarea>
-                  <div class="invalid-feedback d-block" *ngIf="isInvalid(field)">Required value missing.</div>
+                  <label class="form-label" [for]="field.key">{{
+                    field.label
+                  }}</label>
+                  <textarea
+                    class="form-control"
+                    rows="3"
+                    [id]="field.key"
+                    [formControlName]="field.key"
+                    [attr.maxlength]="field.maxLength || null"
+                  ></textarea>
+                  <div
+                    class="invalid-feedback d-block"
+                    *ngIf="isInvalid(field)"
+                  >
+                    Required value missing.
+                  </div>
                 </div>
 
                 <div *ngSwitchCase="'select'">
-                  <label class="form-label" [for]="field.key">{{ field.label }}</label>
-                  <select class="form-select" [id]="field.key" [formControlName]="field.key">
+                  <label class="form-label" [for]="field.key">{{
+                    field.label
+                  }}</label>
+                  <select
+                    class="form-select"
+                    [id]="field.key"
+                    [formControlName]="field.key"
+                  >
                     <option [ngValue]="null">Select {{ field.label }}</option>
-                    <option *ngFor="let option of optionsFor(field)" [ngValue]="optionValue(option, field)">
+                    <option
+                      *ngFor="let option of optionsFor(field)"
+                      [ngValue]="optionValue(option, field)"
+                    >
                       {{ optionLabel(option, field) }}
                     </option>
                   </select>
-                  <div class="invalid-feedback d-block" *ngIf="isInvalid(field)">Required value missing.</div>
                 </div>
 
                 <div *ngSwitchDefault>
-                  <label class="form-label" [for]="field.key">{{ field.label }}</label>
+                  <label class="form-label" [for]="field.key">{{
+                    field.label
+                  }}</label>
                   <input
                     class="form-control"
                     [id]="field.key"
@@ -66,36 +119,59 @@
                     [attr.step]="field.step ?? null"
                     [attr.maxlength]="field.maxLength || null"
                   />
-                  <div class="invalid-feedback d-block" *ngIf="isInvalid(field)">Required value missing.</div>
+                  <div
+                    class="invalid-feedback d-block"
+                    *ngIf="isInvalid(field)"
+                  >
+                    Required value missing.
+                  </div>
                 </div>
               </ng-container>
             </div>
 
-            <button class="btn btn-primary" type="submit" [disabled]="saving || form.invalid">
-              <span>{{ saving ? 'Saving' : 'Save' }}</span>
+            <button
+              class="btn btn-primary"
+              type="submit"
+              [disabled]="saving || form.invalid"
+            >
+              <span>{{ saving ? "Saving" : "Save" }}</span>
             </button>
           </form>
         </div>
       </div>
     </div>
 
+    <!-- TABLE -->
     <div class="col-12" [class.col-xl-8]="showForm">
       <div class="data-card card">
         <div class="card-body">
           <div class="row g-3 align-items-end mb-3">
             <div class="col-md-7">
-              <label class="form-label" for="crudSearch">Search {{ cfg.title }}</label>
+              <label class="form-label" for="crudSearch"
+                >Search {{ cfg.title }}</label
+              >
               <div class="input-group">
                 <span class="input-group-text">Search</span>
-                <input id="crudSearch" class="form-control" type="search" [(ngModel)]="searchTerm" (ngModelChange)="applyFilter()" />
+                <input
+                  id="crudSearch"
+                  class="form-control"
+                  type="search"
+                  [(ngModel)]="searchTerm"
+                  (ngModelChange)="applyFilter()"
+                />
               </div>
             </div>
             <div class="col-md-5 text-md-end">
-              <span class="badge text-bg-light">{{ filteredRecords.length }} records</span>
+              <span class="badge text-bg-light"
+                >{{ filteredRecords.length }} records</span
+              >
             </div>
           </div>
 
-          <div class="table-responsive" *ngIf="filteredRecords.length; else emptyRecords">
+          <div
+            class="table-responsive"
+            *ngIf="filteredRecords.length; else emptyRecords"
+          >
             <table class="table table-hover align-middle">
               <thead>
                 <tr>
@@ -103,20 +179,44 @@
                   <th class="text-end">Actions</th>
                 </tr>
               </thead>
+
               <tbody>
                 <tr *ngFor="let record of filteredRecords">
                   <td *ngFor="let field of tableFields()">
-                    <span *ngIf="field.type === 'checkbox'; else textCell" class="badge" [class.text-bg-success]="record[field.key]" [class.text-bg-secondary]="!record[field.key]">
-                      {{ record[field.key] ? 'Yes' : 'No' }}
+                    <span
+                      *ngIf="field.type === 'checkbox'; else textCell"
+                      class="badge"
+                      [class.text-bg-success]="record[field.key]"
+                      [class.text-bg-secondary]="!record[field.key]"
+                    >
+                      {{ record[field.key] ? "Yes" : "No" }}
                     </span>
                     <ng-template #textCell>
-                      <span class="d-inline-block">{{ formatCell(record, field) }}</span>
+                      <span class="d-inline-block">{{
+                        formatCell(record, field)
+                      }}</span>
                     </ng-template>
                   </td>
+
                   <td class="text-end">
                     <div class="btn-group btn-group-sm">
-                      <button class="btn btn-outline-primary" type="button" (click)="startEdit(record)" title="Edit">Edit</button>
-                      <button class="btn btn-outline-danger" type="button" *ngIf="canDelete()" (click)="deleteRecord(record)" title="Delete">Delete</button>
+                      <button
+                        class="btn btn-outline-primary"
+                        type="button"
+                        (click)="startEdit(record)"
+                        title="Edit"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        class="btn btn-outline-danger"
+                        type="button"
+                        *ngIf="canDelete()"
+                        (click)="deleteRecord(record)"
+                        title="Delete"
+                      >
+                        Delete
+                      </button>
                     </div>
                   </td>
                 </tr>
@@ -125,7 +225,9 @@
           </div>
 
           <ng-template #emptyRecords>
-            <div class="empty-panel alert alert-secondary text-center mb-0">{{ loading ? 'Loading records...' : 'No records found.' }}</div>
+            <div class="empty-panel alert alert-secondary text-center mb-0">
+              {{ loading ? "Loading records..." : "No records found." }}
+            </div>
           </ng-template>
         </div>
       </div>
